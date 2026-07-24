@@ -13,7 +13,7 @@
     "
   >
     <!-- Scroll progress bar -->
-    <div class="fixed top-0 left-0 z-[300] h-0.5" :style="{ width: scrollProgress + '%', background: 'linear-gradient(90deg, #e94560, #f59e0b, #eab308, #22c55e, #06b6d4, #8b5cf6, #e94560)' }" />
+    <div class="fixed top-0 left-0 z-[300] h-1" :style="{ width: scrollProgress + '%', background: 'linear-gradient(90deg, #e94560, #f59e0b, #eab308, #22c55e, #06b6d4, #8b5cf6, #e94560)' }" />
     <!-- Decorative blobs -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
       <div
