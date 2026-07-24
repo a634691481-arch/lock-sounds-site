@@ -74,7 +74,7 @@
 
       <!-- Error state -->
       <div v-else-if="error" class="text-center py-32">
-        <div class="text-5xl mb-4">😵</div>
+        <div class="flex justify-center mb-4"><Icon name="exclamation-triangle" class="w-12 h-12 text-slate-300" /></div>
         <p class="text-slate-500 mb-6">{{ error }}</p>
         <button
           class="px-8 py-3 glass font-playful text-lg text-[#e94560] border-white/40 cursor-pointer hover:bg-white/90 transition-all duration-200 active:scale-95"
@@ -207,7 +207,7 @@
 
         <!-- Empty -->
         <div v-if="sounds.length === 0" class="text-center py-32">
-          <div class="text-6xl mb-4">🔍</div>
+          <div class="flex justify-center mb-4"><Icon name="magnifying-glass" class="w-12 h-12 text-slate-300" /></div>
           <p class="text-slate-400 font-playful text-lg">没有匹配的音效</p>
           <p class="text-slate-300 text-sm mt-1">换换搜索词试试？</p>
         </div>
@@ -233,25 +233,26 @@
       <p>锁车音效分享平台 &copy; {{ new Date().getFullYear() }} — 海量个性锁车音效，免费在线试听与下载</p>
     </footer>
 
-    <!-- Back to top -->
-    <button
-      class="fixed z-[999] w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#e94560] ring-4 ring-white/60 shadow-[0_4px_16px_rgba(233,69,96,0.5)] cursor-pointer text-white text-sm sm:text-lg hover:scale-110 hover:shadow-[0_8px_28px_rgba(233,69,96,0.6)] transition-all duration-300 ease-spring flex items-center justify-center border-none"
-      :class="player.currentSound.value ? 'bottom-[230px] sm:bottom-20 left-5' : 'bottom-20 left-5'"
-      title="回到顶部"
-      @click="scrollToTop"
+    <!-- Floating buttons -->
+    <div
+      class="fixed z-[999] left-5 flex flex-col gap-3"
+      :class="player.currentSound.value ? 'bottom-[230px] sm:bottom-20' : 'bottom-20 sm:bottom-5'"
     >
-      ↑
-    </button>
-
-    <!-- Feedback button -->
-    <button
-      class="fixed z-[999] w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#e94560] ring-4 ring-white/60 shadow-[0_4px_16px_rgba(233,69,96,0.5)] cursor-pointer text-white text-sm sm:text-lg hover:scale-110 hover:shadow-[0_8px_28px_rgba(233,69,96,0.6)] transition-all duration-300 ease-spring flex items-center justify-center border-none"
-      :class="player.currentSound.value ? 'bottom-[170px] sm:bottom-5 left-5' : 'bottom-5 left-5'"
-      title="反馈与建议"
-      @click="showFeedback = true"
-    >
-      💬
-    </button>
+      <button
+        class="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#e94560] ring-4 ring-white/60 shadow-[0_4px_16px_rgba(233,69,96,0.5)] cursor-pointer text-white text-sm sm:text-lg hover:scale-110 hover:shadow-[0_8px_28px_rgba(233,69,96,0.6)] transition-all duration-300 ease-spring flex items-center justify-center border-none"
+        title="回到顶部"
+        @click="scrollToTop"
+      >
+        <Icon name="arrow-up" class="w-5 h-5 sm:w-6 sm:h-6" />
+      </button>
+      <button
+        class="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#e94560] ring-4 ring-white/60 shadow-[0_4px_16px_rgba(233,69,96,0.5)] cursor-pointer text-white text-sm sm:text-lg hover:scale-110 hover:shadow-[0_8px_28px_rgba(233,69,96,0.6)] transition-all duration-300 ease-spring flex items-center justify-center border-none"
+        title="反馈与建议"
+        @click="showFeedback = true"
+      >
+        <Icon name="chat-bubble-left-ellipsis" class="w-5 h-5 sm:w-6 sm:h-6" />
+      </button>
+    </div>
 
     <!-- Feedback modal -->
     <FeedbackModal v-model="showFeedback" />

@@ -17,7 +17,7 @@
           <div class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-500 ease-out-quint"
             :class="{ 'group-hover:translate-x-px group-hover:-translate-y-px': !isPlaying && !isBuffering }">
             <span v-if="isBuffering" class="text-white text-xs animate-spin">⏳</span>
-            <span v-else class="text-white text-sm">{{ isPlaying ? '⏸' : '▶' }}</span>
+            <Icon v-else :name="isPlaying ? 'pause' : 'play'" class="w-4 h-4 text-white" />
           </div>
         </div>
         <!-- Glow ring on hover -->
@@ -38,7 +38,7 @@
           <span class="text-slate-300 flex-shrink-0 select-none">·</span>
           <span class="flex-shrink-0">{{ sound.duration }}</span>
           <span class="text-slate-300 flex-shrink-0 select-none">·</span>
-          <span class="flex-shrink-0 tabular-nums">▶ {{ sound.plays.toLocaleString() }}</span>
+          <span class="flex-shrink-0 tabular-nums flex items-center gap-0.5"><Icon name="play" class="w-3 h-3" />{{ sound.plays.toLocaleString() }}</span>
         </div>
       </div>
 
@@ -49,14 +49,14 @@
           title="分享"
           @click="onShare"
         >
-          ↗
+          <Icon name="arrow-top-right-on-square" class="w-4 h-4" />
         </button>
         <button
           class="w-8 h-8 rounded-xl border-none cursor-pointer bg-white/60 hover:bg-[#e94560] hover:text-white transition-all duration-400 ease-spring text-[13px] flex items-center justify-center active:scale-90"
           title="下载"
           @click="$emit('download', sound)"
         >
-          ⬇
+          <Icon name="arrow-down-tray" class="w-4 h-4" />
         </button>
       </div>
     </div>

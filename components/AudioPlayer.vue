@@ -18,7 +18,7 @@
             </div>
             <span class="eyebrow text-slate-400 bg-white/50">正在播放</span>
           </div>
-          <button class="bg-transparent border-none text-slate-400 hover:text-[#e94560] cursor-pointer text-xs transition-colors duration-300" @click="$emit('close')">✕</button>
+          <button class="bg-transparent border-none text-slate-400 hover:text-[#e94560] cursor-pointer text-xs transition-colors duration-300" @click="$emit('close')"><Icon name="x-mark" class="w-3.5 h-3.5" /></button>
         </div>
 
         <!-- Track name -->
@@ -49,23 +49,23 @@
         <!-- Controls -->
         <div class="flex items-center gap-1">
           <!-- Share (left) -->
-          <button class="w-7 h-7 rounded-full bg-white/60 border-none cursor-pointer text-xs text-slate-500 hover:bg-[#e94560] hover:text-white transition-all duration-200 flex items-center justify-center active:scale-90" title="分享" @click="$emit('share')">↗</button>
+          <button class="w-7 h-7 rounded-full bg-white/60 border-none cursor-pointer text-xs text-slate-500 hover:bg-[#e94560] hover:text-white transition-all duration-200 flex items-center justify-center active:scale-90" title="分享" @click="$emit('share')"><Icon name="arrow-top-right-on-square" class="w-3.5 h-3.5" /></button>
 
           <!-- Prev / Play / Next (center) -->
           <div class="flex items-center gap-1.5 flex-1 justify-center">
-            <button class="w-7 h-7 rounded-full bg-white/60 border-none cursor-pointer text-xs text-slate-500 hover:bg-[#e94560] hover:text-white transition-all duration-200 flex items-center justify-center active:scale-90" title="上一首" @click="$emit('prev')">⏮</button>
+            <button class="w-7 h-7 rounded-full bg-white/60 border-none cursor-pointer text-xs text-slate-500 hover:bg-[#e94560] hover:text-white transition-all duration-200 flex items-center justify-center active:scale-90" title="上一首" @click="$emit('prev')"><Icon name="backward" class="w-3.5 h-3.5" /></button>
             <button
               class="w-9 h-9 rounded-full border-none cursor-pointer text-white text-sm flex items-center justify-center transition-all duration-200 active:scale-90"
               :class="isPlaying ? 'bg-emerald-400' : 'bg-[#e94560]'"
               @click="$emit(isPlaying ? 'pause' : 'resume')"
-            >{{ isPlaying ? '⏸' : '▶' }}</button>
-            <button class="w-7 h-7 rounded-full bg-white/60 border-none cursor-pointer text-xs text-slate-500 hover:bg-[#e94560] hover:text-white transition-all duration-200 flex items-center justify-center active:scale-90" title="下一首" @click="$emit('next')">⏭</button>
+            ><Icon :name="isPlaying ? 'pause' : 'play'" class="w-5 h-5" /></button>
+            <button class="w-7 h-7 rounded-full bg-white/60 border-none cursor-pointer text-xs text-slate-500 hover:bg-[#e94560] hover:text-white transition-all duration-200 flex items-center justify-center active:scale-90" title="下一首" @click="$emit('next')"><Icon name="forward" class="w-3.5 h-3.5" /></button>
           </div>
 
           <!-- Download + Close (right) -->
           <div class="flex items-center gap-1">
-            <button class="w-7 h-7 rounded-full bg-white/60 border-none cursor-pointer text-xs text-slate-500 hover:bg-[#e94560] hover:text-white transition-all duration-200 flex items-center justify-center active:scale-90" title="下载" @click="$emit('download')">⬇</button>
-            <button class="sm:hidden w-7 h-7 rounded-full bg-white/60 border-none cursor-pointer text-xs text-slate-400 hover:text-[#e94560] transition-all duration-200 flex items-center justify-center active:scale-90" @click="$emit('close')">✕</button>
+            <button class="w-7 h-7 rounded-full bg-white/60 border-none cursor-pointer text-xs text-slate-500 hover:bg-[#e94560] hover:text-white transition-all duration-200 flex items-center justify-center active:scale-90" title="下载" @click="$emit('download')"><Icon name="arrow-down-tray" class="w-3.5 h-3.5" /></button>
+            <button class="sm:hidden w-7 h-7 rounded-full bg-white/60 border-none cursor-pointer text-xs text-slate-400 hover:text-[#e94560] transition-all duration-200 flex items-center justify-center active:scale-90" @click="$emit('close')"><Icon name="x-mark" class="w-3.5 h-3.5" /></button>
           </div>
         </div>
       </div>

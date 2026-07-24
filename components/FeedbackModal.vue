@@ -8,10 +8,10 @@
             <!-- Header -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
-                <span class="text-lg">💬</span>
+                <Icon name="chat-bubble-left-ellipsis" class="w-5 h-5 text-[#e94560]" />
                 <span class="font-bold text-slate-700">反馈与建议</span>
               </div>
-              <button class="bg-transparent border-none text-slate-400 hover:text-[#e94560] cursor-pointer text-lg transition-colors" @click="close">✕</button>
+              <button class="bg-transparent border-none text-slate-400 hover:text-[#e94560] cursor-pointer text-lg transition-colors" @click="close"><Icon name="x-mark" class="w-4 h-4" /></button>
             </div>
 
             <!-- Form -->

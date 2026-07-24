@@ -12,13 +12,13 @@
             'bg-white/90 text-slate-700 border border-white/30'
           ]"
         >
-          <span>{{ icon(t.type) }}</span>
+          <span><Icon :name="iconName(t.type)" class="w-4 h-4" /></span>
           <span class="flex-1">{{ t.message }}</span>
           <button
             class="bg-transparent border-none cursor-pointer text-white/70 hover:text-white text-sm ml-1"
             @click="dismiss(t.id)"
           >
-            ✕
+            <Icon name="x-mark" class="w-3 h-3" />
           </button>
         </div>
       </TransitionGroup>
@@ -31,11 +31,11 @@ import type { ToastType } from '~/composables/useToast'
 
 const { toasts, dismiss } = useToast()
 
-function icon(type: ToastType): string {
+function iconName(type: ToastType): string {
   switch (type) {
-    case 'success': return '✅'
-    case 'error': return '❌'
-    case 'info': return 'ℹ️'
+    case 'success': return 'check-circle'
+    case 'error': return 'x-circle'
+    case 'info': return 'information-circle'
   }
 }
 </script>

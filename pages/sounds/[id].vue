@@ -10,7 +10,7 @@
 
     <div class="max-w-2xl mx-auto px-5 pt-20 pb-16 relative z-10">
       <NuxtLink to="/" class="inline-flex items-center gap-1 text-slate-400 hover:text-[#e94560] text-sm mb-8 transition-colors">
-        ← 返回列表
+        <Icon name="arrow-left" class="w-4 h-4 inline" /> 返回列表
       </NuxtLink>
 
       <template v-if="sound">
@@ -21,7 +21,7 @@
               :class="isPlaying ? 'bg-emerald-400 scale-105' : 'bg-[#e94560]'"
               @click="togglePlay"
             >
-              <span class="text-white text-xl">{{ isPlaying ? '⏸' : '▶' }}</span>
+              <Icon :name="isPlaying ? 'pause' : 'play'" class="w-6 h-6 text-white" />
             </button>
             <div class="min-w-0">
               <h1 class="text-xl font-bold text-slate-800 leading-snug mb-1">{{ sound.name }}</h1>
@@ -30,9 +30,9 @@
                 <span class="text-slate-300">·</span>
                 <span>{{ sound.duration }}</span>
                 <span class="text-slate-300">·</span>
-                <span>▶ {{ sound.plays.toLocaleString() }}</span>
+                <span class="flex items-center gap-0.5"><Icon name="play" class="w-3 h-3" /> {{ sound.plays.toLocaleString() }}</span>
                 <span class="text-slate-300">·</span>
-                <span>⬇ {{ sound.downloads.toLocaleString() }}</span>
+                <span class="flex items-center gap-0.5"><Icon name="arrow-down-tray" class="w-3 h-3" /> {{ sound.downloads.toLocaleString() }}</span>
               </div>
             </div>
           </div>
@@ -42,24 +42,24 @@
           <div class="doppelrand-inner px-6 py-4 flex items-center justify-between gap-4">
             <button class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 text-sm text-slate-500 hover:bg-[#e94560] hover:text-white border-none cursor-pointer transition-all duration-200 active:scale-90"
               @click="handleShare">
-              ↗ 分享链接
+              <Icon name="arrow-top-right-on-square" class="w-4 h-4" /> 分享链接
             </button>
             <button class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 text-sm text-slate-500 hover:bg-[#e94560] hover:text-white border-none cursor-pointer transition-all duration-200 active:scale-90"
               @click="handleDownload">
-              ⬇ 下载音效
+              <Icon name="arrow-down-tray" class="w-4 h-4" /> 下载音效
             </button>
           </div>
         </div>
 
         <div class="text-center">
           <NuxtLink to="/" class="text-sm text-slate-400 hover:text-[#e94560] transition-colors">
-            发现更多锁车音效 →
+            发现更多锁车音效 <Icon name="arrow-right" class="w-4 h-4 inline" />
           </NuxtLink>
         </div>
       </template>
 
       <div v-else class="text-center py-24">
-        <div class="text-5xl mb-4">🔍</div>
+        <div class="flex justify-center mb-4"><Icon name="magnifying-glass" class="w-12 h-12 text-slate-300" /></div>
         <p class="text-slate-500 text-lg">音效未找到</p>
         <NuxtLink to="/" class="inline-block mt-4 text-[#e94560] hover:underline">返回首页</NuxtLink>
       </div>
