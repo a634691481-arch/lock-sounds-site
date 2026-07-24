@@ -13,7 +13,7 @@
     "
   >
     <!-- Scroll progress bar -->
-    <div class="fixed top-0 left-0 z-[300] h-1" :style="{ width: scrollProgress + '%', background: 'linear-gradient(90deg, #e94560, #f59e0b, #eab308, #22c55e, #06b6d4, #8b5cf6, #e94560)' }" />
+    <div class="fixed top-0 left-0 z-[300] h-1" :style="{ width: scrollProgress + '%', background: 'linear-gradient(90deg, #e94560, #f59e0b, #eab308, #22c55e, #06b6d4, #8b5cf6, #e94560)', backgroundSize: '200% 100%', animation: 'rainbow 2s linear infinite' }" />
     <!-- Decorative blobs -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
       <div
@@ -555,6 +555,10 @@ watch(sounds, async () => {
 })
 </script>
 <style>
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
