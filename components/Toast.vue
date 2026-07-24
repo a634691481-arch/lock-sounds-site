@@ -1,6 +1,6 @@
 <template>
   <Teleport to="body">
-    <div class="fixed top-5 right-5 z-[300] flex flex-col gap-2 pointer-events-none">
+    <div class="fixed top-5 right-5 z-[10000] flex flex-col gap-2 pointer-events-none">
       <TransitionGroup name="toast">
         <div
           v-for="t in toasts"

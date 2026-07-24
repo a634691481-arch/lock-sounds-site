@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="show" class="fixed inset-0 z-[400] flex items-center justify-center p-4" @click.self="close">
+      <div v-if="show" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="close">
         <div class="absolute inset-0 bg-black/20 backdrop-blur-sm" />
         <div class="relative doppelrand shadow-tint w-full max-w-md">
           <div class="doppelrand-inner p-5 flex flex-col gap-4">
