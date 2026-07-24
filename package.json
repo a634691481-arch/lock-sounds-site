@@ -1,0 +1,22 @@
+{
+  "name": "lock-sounds-site",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0",
+    "nuxt": "^3"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}
