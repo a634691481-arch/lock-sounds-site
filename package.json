@@ -12,7 +12,8 @@
     "nuxt": "^3"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^6"
+    "@nuxtjs/tailwindcss": "^6",
+    "@vite-pwa/nuxt": "^1.1.1"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

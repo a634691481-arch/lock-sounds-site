@@ -1,8 +1,65 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: ['@nuxtjs/tailwindcss', '@vite-pwa/nuxt'],
   css: ['~/assets/css/main.css'],
   compatibilityDate: '2026-07-24',
+
+  pwa: {
+    registerType: 'autoUpdate',
+    workbox: {
+      globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+      runtimeCaching: [
+        {
+          urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'google-fonts-css',
+            expiration: { maxEntries: 4, maxAgeSeconds: 365 * 24 * 60 * 60 },
+          },
+        },
+        {
+          urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'google-fonts',
+            expiration: { maxEntries: 4, maxAgeSeconds: 365 * 24 * 60 * 60 },
+          },
+        },
+        {
+          urlPattern: /^https:\/\/cdn\.jsdelivr\.net\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'jsdelivr-audio',
+            expiration: { maxEntries: 100, maxAgeSeconds: 30 * 24 * 60 * 60 },
+          },
+        },
+        {
+          urlPattern: /^https:\/\/api\.pushplus\.tech\/.*/i,
+          handler: 'NetworkOnly',
+          options: { cacheName: 'api-pushplus' },
+        },
+      ],
+    },
+    manifest: {
+      name: '锁车音效分享平台',
+      short_name: '锁车音效',
+      description: '海量个性锁车音效免费在线试听和下载',
+      theme_color: '#e94560',
+      background_color: '#fef2f2',
+      display: 'standalone',
+      lang: 'zh-CN',
+      start_url: '/',
+      scope: '/',
+      icons: [
+        {
+          src: '/favicon.svg',
+          sizes: 'any',
+          type: 'image/svg+xml',
+          purpose: 'any maskable',
+        },
+      ],
+    },
+  },
 
   app: {
     head: {
