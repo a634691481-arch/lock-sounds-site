@@ -277,10 +277,17 @@
 
 <script setup lang="ts">
 import type { Sound, Category, SortType } from "~/types/sound";
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-gsap.registerPlugin(ScrollTrigger)
+let gsap: any = null
+let ScrollTrigger: any = null
+
+async function loadGSAP() {
+  if (gsap) return
+  const mod = await import('gsap')
+  gsap = mod.default
+  ScrollTrigger = (await import('gsap/ScrollTrigger')).ScrollTrigger
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 const RECENT_KEY = "lock-sounds-recent";
 const MAX_RECENT = 20;
@@ -519,11 +526,12 @@ onMounted(() => {
 onUnmounted(() => {
   player.stop();
   window.removeEventListener("keydown", onKeydown);
-  ScrollTrigger.getAll().forEach(t => t.kill())
+  if (ScrollTrigger) ScrollTrigger.getAll().forEach((t: any) => t.kill())
 });
 
 // GSAP scroll-triggered card entrance
-watch(sounds, () => {
+watch(sounds, async () => {
+  await loadGSAP()
   nextTick(() => {
     const elements = Object.values(cardRefs.value)
     if (!elements.length) return
