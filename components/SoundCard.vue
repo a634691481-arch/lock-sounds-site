@@ -16,7 +16,7 @@
           <!-- Inner icon ring -->
           <div class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-500 ease-out-quint"
             :class="{ 'group-hover:translate-x-px group-hover:-translate-y-px': !isPlaying && !isBuffering }">
-            <span v-if="isBuffering" class="text-white text-xs animate-spin">⏳</span>
+            <Icon v-if="isBuffering" name="arrow-path" class="w-4 h-4 text-white animate-spin" />
             <Icon v-else :name="isPlaying ? 'pause' : 'play'" class="w-4 h-4 text-white" />
           </div>
         </div>
