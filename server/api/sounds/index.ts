@@ -6,7 +6,7 @@ export default defineEventHandler((event) => {
 
   const search = (query.search as string || '').toLowerCase()
   const category = query.category as string || ''
-  const sort = query.sort as string || 'latest'
+  const sort = query.sort as string || 'plays'
   const page = Math.max(1, parseInt(query.page as string || '1'))
   const pageSize = Math.min(100, Math.max(1, parseInt(query.pageSize as string || '50')))
 

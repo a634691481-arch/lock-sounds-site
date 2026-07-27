@@ -89,7 +89,7 @@
         <!-- Intro paragraph -->
         <div class="py-4 text-center">
           <p class="text-slate-500 text-sm leading-relaxed max-w-2xl mx-auto">
-            锁车音效分享平台，收录 <strong class="text-[#e94560]">{{ totalCount }}</strong> 款个性锁车音效。支持在线试听、免费下载，涵盖搞笑、游戏、动漫、动物城AI等多种分类，让你的锁车声音与众不同。
+            锁车音效分享平台，收录 <strong class="text-[#e94560]">{{ grandTotal || totalCount }}</strong> 款个性锁车音效。支持在线试听、免费下载，涵盖搞笑、游戏、动漫、动物城AI等多种分类，让你的锁车声音与众不同。
           </p>
         </div>
 
@@ -127,7 +127,7 @@
 
           <!-- Row 2: Categories + Recently played -->
           <div class="flex items-center gap-1.5">
-            <div class="flex gap-1 overflow-x-auto flex-1 scrollbar-hide">
+            <div ref="categoryScroll" class="flex gap-1 overflow-x-auto flex-1 scrollbar-hide">
               <button
                 v-for="cat in filterTabs"
                 :key="cat.name"
@@ -137,7 +137,7 @@
                     ? 'bg-[#e94560] text-white shadow-[0_1px_6px_rgba(233,69,96,0.3)]'
                     : 'bg-white/70 text-slate-500 hover:bg-white/90',
                 ]"
-                @click="handleCategorySelect(cat.name)"
+                @click="(e) => handleCategorySelect(cat.name, e)"
               >
                 {{ cat.name
                 }}<span class="opacity-60 ml-0.5">{{ cat.count }}</span>
@@ -296,9 +296,10 @@ const MAX_RECENT = 20;
 
 const search = ref("");
 const activeCategory = ref("全部");
-const sort = ref<SortType>("latest");
+const sort = ref<SortType>("plays");
 const page = ref(1);
 const totalCount = ref(0);
+const grandTotal = ref(0);
 const totalPages = ref(0);
 const loading = ref(true);
 const loadingMore = ref(false);
@@ -344,15 +345,15 @@ const pageSize = 60;
 const hasMore = computed(() => page.value < totalPages.value);
 
 const sortOptions: { label: string; value: SortType }[] = [
-  { label: "最新", value: "latest" },
   { label: "最热", value: "plays" },
+  { label: "最新", value: "latest" },
   { label: "下载", value: "downloads" },
 ];
 
 const showRecent = ref(false);
 
 const filterTabs = computed(() => {
-  const total = categories.value.reduce((s, c) => s + c.count, 0);
+  const total = grandTotal.value || totalCount.value;
   return [{ name: "全部", count: total }, ...categories.value];
 });
 
@@ -396,6 +397,9 @@ async function fetchSounds() {
     sounds.value = res.items;
     totalCount.value = res.total;
     totalPages.value = res.totalPages;
+    if (activeCategory.value === '全部' && !search.value) {
+      grandTotal.value = res.total;
+    }
   } catch (e: any) {
     error.value = e?.message || "数据加载失败";
   }
@@ -434,13 +438,16 @@ async function loadMore() {
   loadingMore.value = false;
 }
 
-function handleCategorySelect(cat: string) {
+const categoryScroll = ref<HTMLElement | null>(null)
+
+function handleCategorySelect(cat: string, e: MouseEvent) {
   activeCategory.value = cat;
   page.value = 1;
   loading.value = true;
   error.value = "";
   Promise.all([fetchSounds(), fetchCategories()]);
   loading.value = false;
+  (e.target as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
 }
 
 function playSound(sound: Sound) {
