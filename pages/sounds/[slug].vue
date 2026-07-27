@@ -125,10 +125,7 @@ function togglePlay() {
 
 function handleDownload() {
   if (!sound.value) return
-  const a = document.createElement('a')
-  a.href = player.getAudioUrl(sound.value)
-  a.download = sound.value.file
-  a.click()
+  downloadFile(player.getAudioUrl(sound.value), sound.value.file)
 }
 
 function handleShare() {

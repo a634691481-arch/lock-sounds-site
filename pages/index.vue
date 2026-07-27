@@ -423,10 +423,7 @@ function playSound(sound: Sound) {
 }
 
 function handleDownload(sound: Sound) {
-  const a = document.createElement("a");
-  a.href = player.getAudioUrl(sound);
-  a.download = sound.file;
-  a.click();
+  downloadFile(player.getAudioUrl(sound), sound.file)
   toast.success(`开始下载 ${sound.name}`)
 }
 

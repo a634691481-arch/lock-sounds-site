@@ -118,10 +118,7 @@ function close() {
 
 function handleDownload() {
   if (!wallpaper.value) return
-  const a = document.createElement('a')
-  a.href = fullSrc.value
-  a.download = `${wallpaper.value.title}.png`
-  a.click()
+  downloadFile(fullSrc.value, `${wallpaper.value.title}.png`)
   toast.success(`正在下载 ${wallpaper.value.title}`)
 }
 
