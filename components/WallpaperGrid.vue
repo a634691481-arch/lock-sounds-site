@@ -49,12 +49,17 @@
     </div>
 
     <!-- Loading -->
-    <div v-if="loading" class="py-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-      <div v-for="i in 12" :key="i" class="doppelrand animate-pulse">
-        <div class="aspect-[16/9] bg-white/60 rounded-xl" />
-        <div class="p-2 space-y-1.5">
-          <div class="h-3 bg-white/60 rounded w-3/4" />
-          <div class="h-2 bg-white/40 rounded w-1/2" />
+    <div v-if="loading" class="py-3">
+      <div class="flex gap-2 pb-2">
+        <div v-for="n in 6" :key="n" class="h-9 w-24 rounded-full bg-white/60 backdrop-blur-sm animate-pulse" />
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div v-for="n in 8" :key="n" class="doppelrand animate-pulse">
+          <div class="aspect-[16/9] bg-white/60 rounded-xl" />
+          <div class="p-2 space-y-1.5">
+            <div class="h-3 bg-white/60 rounded w-3/4" />
+            <div class="h-2 bg-white/40 rounded w-1/2" />
+          </div>
         </div>
       </div>
     </div>
