@@ -79,8 +79,7 @@ const loading = ref(true)
 
 onMounted(async () => {
   try {
-    const res = await $fetch<{ data: string }>(`/api/sounds/${route.params.id}`)
-    sound.value = decryptResponse<Sound>(res.data)
+    sound.value = await $fetch<Sound>(`/api/sounds/${route.params.id}`)
   } catch {
     sound.value = null
   }
@@ -100,7 +99,7 @@ useSeoMeta({
 })
 
 useHead(() => ({
-  link: [{ rel: 'canonical', href: `https://lock-sounds.vercel.app/sounds/${route.params.id}` }],
+  link: [{ rel: 'canonical', href: `https://lock.moon.vip/sounds/${route.params.id}` }],
   script: sound.value ? [{
     type: 'application/ld+json',
     innerHTML: JSON.stringify({

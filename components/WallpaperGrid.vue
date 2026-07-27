@@ -123,7 +123,6 @@
 
 <script setup lang="ts">
 import type { Wallpaper } from '~/types/wallpaper'
-
 const props = defineProps<{ search: string }>()
 
 const activeCategory = ref('全部')
@@ -158,7 +157,7 @@ async function fetchWallpapers(reset = true, showLoading = true) {
     error.value = ''
   }
   try {
-    const res = await $fetch<{ data: string }>('/api/wallpapers', {
+    const res = await $fetch<{ items: Wallpaper[]; total: number; totalPages: number }>('/api/wallpapers', {
       query: {
         category: activeCategory.value,
         sort: sort.value,
@@ -167,11 +166,10 @@ async function fetchWallpapers(reset = true, showLoading = true) {
         pageSize
       }
     })
-    const data = decryptResponse<{ items: Wallpaper[]; total: number; totalPages: number }>(res.data)
-    if (reset) wallpapers.value = data.items
-    else wallpapers.value.push(...data.items)
-    totalCount.value = data.total
-    totalPages.value = data.totalPages
+    if (reset) wallpapers.value = res.items
+    else wallpapers.value.push(...res.items)
+    totalCount.value = res.total
+    totalPages.value = res.totalPages
   } catch (e: any) {
     error.value = e?.message || '加载失败'
   }
@@ -201,8 +199,7 @@ function selectCategory(cat: string) {
 
 async function fetchCategories() {
   try {
-    const res = await $fetch<{ data: string }>('/api/wallpapers/categories')
-    categories.value = decryptResponse<{ name: string; count: number }[]>(res.data)
+    categories.value = await $fetch<{ name: string; count: number }[]>('/api/wallpapers/categories')
   } catch {}
 }
 

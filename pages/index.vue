@@ -346,7 +346,9 @@ function saveRecent(sound: Sound) {
 async function fetchSounds() {
   try {
     const res = await $fetch<{
-      data: string;
+      items: Sound[];
+      total: number;
+      totalPages: number;
     }>("/api/sounds", {
       query: {
         search: search.value,
@@ -356,16 +358,11 @@ async function fetchSounds() {
         pageSize,
       },
     });
-    const data = decryptResponse<{
-      items: Sound[];
-      total: number;
-      totalPages: number;
-    }>(res.data);
-    sounds.value = data.items;
-    totalCount.value = data.total;
-    totalPages.value = data.totalPages;
+    sounds.value = res.items;
+    totalCount.value = res.total;
+    totalPages.value = res.totalPages;
     if (activeCategory.value === '全部' && !search.value) {
-      grandTotal.value = data.total;
+      grandTotal.value = res.total;
     }
   } catch (e: any) {
     error.value = e?.message || "数据加载失败";
@@ -374,8 +371,7 @@ async function fetchSounds() {
 
 async function fetchCategories() {
   try {
-    const res = await $fetch<{ data: string }>("/api/categories");
-    categories.value = decryptResponse<Category[]>(res.data);
+    categories.value = await $fetch<Category[]>("/api/categories");
   } catch {}
 }
 
@@ -392,7 +388,7 @@ async function loadMore() {
   loadingMore.value = true;
   page.value++;
   try {
-    const res = await $fetch<{ data: string }>("/api/sounds", {
+    const res = await $fetch<{ items: Sound[] }>("/api/sounds", {
       query: {
         search: search.value,
         category: activeCategory.value,
@@ -401,8 +397,7 @@ async function loadMore() {
         pageSize,
       },
     });
-    const data = decryptResponse<{ items: Sound[] }>(res.data);
-    sounds.value.push(...data.items);
+    sounds.value.push(...res.items);
   } catch {}
   loadingMore.value = false;
 }
