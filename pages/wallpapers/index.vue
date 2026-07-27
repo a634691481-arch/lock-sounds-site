@@ -3,6 +3,7 @@
     class="min-h-screen relative"
     style="background: linear-gradient(135deg,#fef2f2 0%,#fdf2f8 25%,#faf5ff 50%,#eff6ff 75%,#f0fdf4 100%)"
   >
+    <StatsToast />
     <AppFab @feedback="showFeedback = true" />
 
     <!-- Decorative blobs -->
@@ -16,7 +17,7 @@
     <!-- Glass header -->
     <header class="glass sticky top-0 z-50 border-b border-white/30">
       <div class="max-w-6xl mx-auto px-5 py-3">
-        <div class="flex items-center gap-2 mb-3 overflow-hidden">
+        <div class="flex items-center gap-2 mb-2 overflow-hidden">
           <span class="text-3xl flex-shrink-0">🖼️</span>
           <h1 class="text-xl sm:text-2xl font-playful tracking-tight flex-1 min-w-0 truncate">
             <NuxtLink to="/" class="text-[#e94560] no-underline hover:opacity-80 transition-opacity">锁车音效</NuxtLink>
@@ -45,7 +46,6 @@
 
     <footer class="max-w-6xl mx-auto px-5 pb-8 pt-4 text-center text-xs text-slate-400 relative z-10">
       <p>车机壁纸分享平台 &copy; {{ new Date().getFullYear() }} — 高清车机壁纸免费在线预览下载</p>
-      <p class="mt-1"><span id="busuanzi_value_site_pv"></span> 次访问 · <span id="busuanzi_value_site_uv"></span> 位访客 · 今日 <span id="busuanzi_value_today_pv"></span></p>
     </footer>
 
     <FeedbackModal v-model="showFeedback" />
