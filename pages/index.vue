@@ -34,20 +34,42 @@
     <header class="glass sticky top-0 z-50 border-b border-white/30">
       <div class="max-w-6xl mx-auto px-5 py-3">
         <div class="flex items-center gap-3 mb-3">
-          <span class="text-3xl">🎵</span>
+          <span class="text-3xl">{{ activeTab === 'sounds' ? '🎵' : '🖼️' }}</span>
           <h1 class="text-2xl font-playful tracking-tight">
-            <span class="text-[#e94560]">锁车音效</span>
-            <span class="text-slate-500 text-lg ml-1 font-normal"
-              >分享平台</span
-            >
+            <span class="text-[#e94560]">{{ activeTab === 'sounds' ? '锁车音效' : '车机壁纸' }}</span>
+            <span class="text-slate-500 text-lg ml-1 font-normal">分享平台</span>
             <span class="text-amber-600 text-sm ml-3 font-normal whitespace-nowrap">— 蔚来乐道L60 川A·BQ0326 见到请滴滴</span>
           </h1>
         </div>
-        <SearchBar v-model="search" />
+        <!-- Tab switch -->
+        <div class="flex rounded-2xl bg-white/40 p-1 gap-1">
+          <button
+            class="flex-1 py-2.5 rounded-xl text-sm font-bold border-none cursor-pointer transition-all duration-300"
+            :class="activeTab === 'sounds' ? 'bg-[#e94560] text-white shadow-[0_2px_8px_rgba(233,69,96,0.3)]' : 'bg-transparent text-slate-500 hover:text-slate-700'"
+            @click="activeTab = 'sounds'"
+          >
+            <Icon name="play" class="w-4 h-4 inline mr-1" />音效
+          </button>
+          <button
+            class="flex-1 py-2.5 rounded-xl text-sm font-bold border-none cursor-pointer transition-all duration-300"
+            :class="activeTab === 'wallpapers' ? 'bg-[#e94560] text-white shadow-[0_2px_8px_rgba(233,69,96,0.3)]' : 'bg-transparent text-slate-500 hover:text-slate-700'"
+            @click="activeTab = 'wallpapers'"
+          >
+            <Icon name="photo" class="w-4 h-4 inline mr-1" />壁纸
+          </button>
+        </div>
+        <SearchBar v-if="activeTab === 'sounds'" v-model="search" class="mt-3" />
       </div>
     </header>
 
     <main class="max-w-6xl mx-auto px-5 relative z-10">
+      <!-- Wallpaper mode -->
+      <div v-if="activeTab === 'wallpapers'" class="py-4">
+        <WallpaperGrid />
+      </div>
+
+      <!-- Sounds mode -->
+      <template v-else>
       <!-- Loading skeleton -->
       <div v-if="loading" class="space-y-4 py-4">
         <div class="flex gap-2 py-3">
@@ -226,6 +248,7 @@
             }}
           </button>
         </div>
+      </template>
       </template>
     </main>
 
@@ -513,6 +536,7 @@ watch([search], () => {
 const cardRefs = ref<Record<number, HTMLElement>>({})
 const scrollProgress = ref(0)
 const autoPlay = ref(true)
+const activeTab = ref<'sounds' | 'wallpapers'>('sounds')
 const showFeedback = ref(false)
 
 function updateScrollProgress() {
