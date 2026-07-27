@@ -8,8 +8,8 @@
         <div class="flex items-start gap-2">
           <span class="text-base flex-shrink-0">📊</span>
           <div class="text-xs text-slate-600 leading-relaxed">
-            <div>总访问 <span class="font-semibold text-slate-800"><span id="busuanzi_value_site_pv"></span></span></div>
-            <div>访客数 <span class="font-semibold text-slate-800"><span id="busuanzi_value_site_uv"></span></span> · 今日 <span class="font-semibold text-slate-800"><span id="busuanzi_value_today_pv"></span></span></div>
+            <div>总访问 <span class="font-semibold text-slate-800">{{ pv }}</span></div>
+            <div>访客数 <span class="font-semibold text-slate-800">{{ uv }}</span> · 今日 <span class="font-semibold text-slate-800">{{ today }}</span></div>
           </div>
           <button class="ml-auto flex-shrink-0 text-slate-400 hover:text-slate-600 transition-colors" @click="dismiss">&times;</button>
         </div>
@@ -24,6 +24,9 @@
 <script setup lang="ts">
 const visible = ref(false)
 const progress = ref(100)
+const pv = ref('')
+const uv = ref('')
+const today = ref('')
 let timer: ReturnType<typeof setInterval> | null = null
 
 function dismiss() {
@@ -31,21 +34,23 @@ function dismiss() {
   if (timer) clearInterval(timer)
 }
 
-function waitForBusuanzi(): Promise<void> {
-  return new Promise((resolve) => {
-    const check = () => {
-      const el = document.getElementById('busuanzi_value_site_pv')
-      if (el && el.textContent && !el.textContent.startsWith(' ')) resolve()
-      else setTimeout(check, 200)
-    }
-    check()
-  })
+function pollBusuanzi() {
+  const pvEl = document.getElementById('busuanzi_value_site_pv')
+  const uvEl = document.getElementById('busuanzi_value_site_uv')
+  const todayEl = document.getElementById('busuanzi_value_today_pv')
+  if (pvEl?.textContent && uvEl?.textContent && todayEl?.textContent) {
+    pv.value = pvEl.textContent.trim()
+    uv.value = uvEl.textContent.trim()
+    today.value = todayEl.textContent.trim()
+  } else {
+    setTimeout(pollBusuanzi, 300)
+  }
 }
 
-onMounted(async () => {
-  await waitForBusuanzi()
+onMounted(() => {
   visible.value = true
   progress.value = 100
+  pollBusuanzi()
   const start = Date.now()
   const duration = 5000
   timer = setInterval(() => {
