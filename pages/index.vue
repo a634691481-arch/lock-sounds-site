@@ -59,13 +59,22 @@
           </button>
         </div>
         <SearchBar v-if="activeTab === 'sounds'" v-model="search" class="mt-3" />
+        <div v-if="activeTab === 'wallpapers'" class="relative mt-3">
+          <Icon name="magnifying-glass" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+          <input
+            v-model="wallpaperSearch"
+            type="text"
+            placeholder="搜索壁纸..."
+            class="w-full pl-12 pr-5 py-3.5 bg-white rounded-2xl border-2 border-slate-200 outline-none text-slate-700 text-base placeholder:text-slate-400 shadow-[0_2px_12px_rgba(0,0,0,0.06)] focus:border-[#e94560] focus:shadow-[0_4px_20px_rgba(233,69,96,0.15)] transition-all duration-200"
+          />
+        </div>
       </div>
     </header>
 
     <main class="max-w-6xl mx-auto px-5 relative z-10">
       <!-- Wallpaper mode -->
       <div v-if="activeTab === 'wallpapers'" class="py-4">
-        <WallpaperGrid />
+        <WallpaperGrid :search="wallpaperSearch" />
       </div>
 
       <!-- Sounds mode -->
@@ -537,6 +546,7 @@ const cardRefs = ref<Record<number, HTMLElement>>({})
 const scrollProgress = ref(0)
 const autoPlay = ref(true)
 const activeTab = ref<'sounds' | 'wallpapers'>('sounds')
+const wallpaperSearch = ref('')
 const showFeedback = ref(false)
 
 function updateScrollProgress() {
