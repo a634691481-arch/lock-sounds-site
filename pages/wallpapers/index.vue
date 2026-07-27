@@ -16,14 +16,14 @@
     <!-- Glass header -->
     <header class="glass sticky top-0 z-50 border-b border-white/30">
       <div class="max-w-6xl mx-auto px-5 py-3">
-        <div class="flex items-center gap-3 mb-3">
-          <span class="text-3xl">🖼️</span>
-          <h1 class="text-2xl font-playful tracking-tight">
+        <div class="flex items-center gap-2 mb-3 overflow-hidden">
+          <span class="text-3xl flex-shrink-0">🖼️</span>
+          <h1 class="text-xl sm:text-2xl font-playful tracking-tight flex-1 min-w-0 truncate">
             <NuxtLink to="/" class="text-[#e94560] no-underline hover:opacity-80 transition-opacity">锁车音效</NuxtLink>
-            <span class="text-slate-500 text-lg ml-1 font-normal">分享平台</span>
-            <span class="text-amber-600 text-sm ml-3 font-normal whitespace-nowrap">— 蔚来乐道L60 川A·BQ0326 见到请滴滴</span>
+            <span class="text-slate-500 text-sm sm:text-lg ml-1 font-normal">分享平台</span>
+            <span class="hidden sm:inline text-amber-600 text-sm ml-3 font-normal whitespace-nowrap">— 川A·BQ0326 路上看到请滴滴，车友是一家</span>
           </h1>
-          <NuxtLink to="/" class="ml-auto flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/70 hover:bg-[#e94560] hover:text-white text-slate-600 text-sm font-semibold no-underline transition-all duration-200 shadow-sm whitespace-nowrap">
+          <NuxtLink to="/" class="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/70 hover:bg-[#e94560] hover:text-white text-slate-600 text-xs sm:text-sm font-semibold no-underline transition-all duration-200 shadow-sm whitespace-nowrap">
             <Icon name="play" class="w-4 h-4" />车机音频
           </NuxtLink>
         </div>

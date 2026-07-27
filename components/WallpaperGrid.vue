@@ -68,6 +68,7 @@
                   ? 'bg-[#e94560] text-white shadow-[0_1px_6px_rgba(233,69,96,0.3)]'
                   : 'bg-white/70 text-slate-500 hover:bg-white/90',
               ]"
+              :data-wp-cat="cat.name"
               @click="selectCategory(cat.name)"
             >
               {{ cat.name }}<span class="opacity-60 ml-0.5">{{ cat.count }}</span>
@@ -108,15 +109,10 @@
       </div>
     </template>
 
-    <!-- Load more -->
-    <div v-if="hasMore" class="text-center pb-10">
-      <button
-        class="px-10 py-3 glass font-playful text-[#e94560] border-white/40 cursor-pointer hover:bg-white/90 hover:scale-105 transition-all duration-200 text-lg active:scale-95"
-        :disabled="loadingMore"
-        @click="loadMore"
-      >
-        {{ loadingMore ? '加载中...' : `查看更多 (${wallpapers.length}/${totalCount})` }}
-      </button>
+    <!-- load-more sentinel -->
+    <div v-if="hasMore" ref="sentinel" class="text-center py-8">
+      <span v-if="loadingMore" class="text-sm text-slate-400">加载中...</span>
+      <span v-else class="text-sm text-slate-300">{{ wallpapers.length }} / {{ totalCount }}</span>
     </div>
 
     <!-- Modal -->
@@ -150,10 +146,18 @@ const sortOptions = [
 const categories = ref<{ name: string; count: number }[]>([])
 const hasMore = computed(() => page.value < totalPages.value)
 
-async function fetchWallpapers(reset = true) {
+const counts = reactive({ loaded: 0, total: 0 })
+watchEffect(() => { counts.loaded = wallpapers.value.length; counts.total = totalCount.value })
+provide('wallpaperCounts', counts)
+
+const sentinel = useInfiniteScroll(() => {
+  if (!loadingMore.value && hasMore.value) loadMore()
+})
+
+async function fetchWallpapers(reset = true, showLoading = true) {
   if (reset) {
     page.value = 1
-    loading.value = true
+    if (showLoading) loading.value = true
     error.value = ''
   }
   try {
@@ -173,7 +177,7 @@ async function fetchWallpapers(reset = true) {
   } catch (e: any) {
     error.value = e?.message || '加载失败'
   }
-  loading.value = false
+  if (showLoading) loading.value = false
   loadingMore.value = false
 }
 
@@ -186,7 +190,15 @@ async function loadMore() {
 
 function selectCategory(cat: string) {
   activeCategory.value = cat
-  fetchWallpapers()
+  error.value = ''
+  fetchWallpapers(true, false)
+    .then(fetchCategories)
+    .then(() => {
+      nextTick(() => {
+        const el = document.querySelector<HTMLElement>(`[data-wp-cat="${cat}"]`)
+        el?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      })
+    })
 }
 
 async function fetchCategories() {
@@ -199,6 +211,6 @@ onMounted(async () => {
   await Promise.all([fetchWallpapers(), fetchCategories()])
 })
 
-watch(() => props.search, () => fetchWallpapers())
-watch(sort, () => fetchWallpapers())
+watch(() => props.search, () => fetchWallpapers(true, false))
+watch(sort, () => fetchWallpapers(true, false))
 </script>

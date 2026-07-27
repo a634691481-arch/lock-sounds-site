@@ -23,14 +23,14 @@
     <!-- Glass header -->
     <header class="glass sticky top-0 z-50 border-b border-white/30">
       <div class="max-w-6xl mx-auto px-5 py-3">
-        <div class="flex items-center gap-3 mb-3">
-          <span class="text-3xl">🎵</span>
-          <h1 class="text-2xl font-playful tracking-tight">
+        <div class="flex items-center gap-2 mb-3 overflow-hidden">
+          <span class="text-3xl flex-shrink-0">🎵</span>
+          <h1 class="text-xl sm:text-2xl font-playful tracking-tight flex-1 min-w-0 truncate">
             <span class="text-[#e94560]">锁车音效</span>
-            <span class="text-slate-500 text-lg ml-1 font-normal">分享平台</span>
-            <span class="text-amber-600 text-sm ml-3 font-normal whitespace-nowrap">— 蔚来乐道L60 川A·BQ0326 见到请滴滴</span>
+            <span class="text-slate-500 text-sm sm:text-lg ml-1 font-normal">分享平台</span>
+            <span class="hidden sm:inline text-amber-600 text-sm ml-3 font-normal whitespace-nowrap">— 川A·BQ0326 路上看到请滴滴，车友是一家</span>
           </h1>
-          <NuxtLink to="/wallpapers" class="ml-auto flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/70 hover:bg-[#e94560] hover:text-white text-slate-600 text-sm font-semibold no-underline transition-all duration-200 shadow-sm whitespace-nowrap">
+          <NuxtLink to="/wallpapers" class="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/70 hover:bg-[#e94560] hover:text-white text-slate-600 text-xs sm:text-sm font-semibold no-underline transition-all duration-200 shadow-sm whitespace-nowrap">
             <Icon name="photo" class="w-4 h-4" />车机壁纸
           </NuxtLink>
         </div>
@@ -128,7 +128,8 @@
                     ? 'bg-[#e94560] text-white shadow-[0_1px_6px_rgba(233,69,96,0.3)]'
                     : 'bg-white/70 text-slate-500 hover:bg-white/90',
                 ]"
-                @click="(e) => handleCategorySelect(cat.name, e)"
+                :data-cat="cat.name"
+                @click="handleCategorySelect(cat.name)"
               >
                 {{ cat.name
                 }}<span class="opacity-60 ml-0.5">{{ cat.count }}</span>
@@ -203,19 +204,10 @@
           <p class="text-slate-300 text-sm mt-1">换换搜索词试试？</p>
         </div>
 
-        <!-- Load more -->
-        <div v-if="hasMore" class="text-center pb-10">
-          <button
-            class="px-10 py-3 glass font-playful text-[#e94560] border-white/40 cursor-pointer hover:bg-white/90 hover:scale-105 transition-all duration-200 text-lg active:scale-95"
-            :disabled="loadingMore"
-            @click="loadMore"
-          >
-            {{
-              loadingMore
-                ? "加载中..."
-                : `查看更多 (${sounds.length}/${totalCount})`
-            }}
-          </button>
+        <!-- load-more sentinel -->
+        <div v-if="hasMore" ref="sentinel" class="text-center py-8">
+          <span v-if="loadingMore" class="text-sm text-slate-400">加载中...</span>
+          <span v-else class="text-sm text-slate-300">{{ sounds.length }} / {{ totalCount }}</span>
         </div>
       </template>
     </main>
@@ -408,14 +400,14 @@ async function loadMore() {
 
 const categoryScroll = ref<HTMLElement | null>(null)
 
-async function handleCategorySelect(cat: string, e: MouseEvent) {
+async function handleCategorySelect(cat: string) {
   activeCategory.value = cat;
   page.value = 1;
-  loading.value = true;
   error.value = "";
   await Promise.all([fetchSounds(), fetchCategories()]);
-  loading.value = false;
-  (e.target as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  await nextTick()
+  const el = categoryScroll.value?.querySelector<HTMLElement>(`[data-cat="${cat}"]`)
+  el?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
 }
 
 function playSound(sound: Sound) {
@@ -481,6 +473,10 @@ watch([search], () => {
 const cardRefs = ref<Record<number, HTMLElement>>({})
 const autoPlay = ref(true)
 const showFeedback = ref(false)
+
+const sentinel = useInfiniteScroll(() => {
+  if (!loadingMore.value && hasMore.value) loadMore()
+})
 
 onMounted(() => {
   loadRecent();
