@@ -33,17 +33,17 @@
           </h1>
         </div>
         <!-- Tab switch -->
-        <div class="flex rounded-2xl bg-white/40 p-1 gap-1">
+        <div class="flex rounded-2xl bg-slate-100/50 p-1 gap-1">
           <button
             class="flex-1 py-2.5 rounded-xl text-sm font-bold border-none cursor-pointer transition-all duration-300"
-            :class="activeTab === 'sounds' ? 'bg-[#e94560] text-white shadow-[0_2px_8px_rgba(233,69,96,0.3)]' : 'bg-transparent text-slate-600 hover:bg-white/60 hover:text-slate-800'"
+            :class="activeTab === 'sounds' ? 'bg-[#e94560] text-white shadow-[0_2px_8px_rgba(233,69,96,0.3)]' : 'bg-white/70 text-slate-600 hover:bg-white hover:text-slate-800 shadow-sm'"
             @click="activeTab = 'sounds'"
           >
             <Icon name="play" class="w-4 h-4 inline mr-1" />音效
           </button>
           <button
             class="flex-1 py-2.5 rounded-xl text-sm font-bold border-none cursor-pointer transition-all duration-300"
-            :class="activeTab === 'wallpapers' ? 'bg-[#e94560] text-white shadow-[0_2px_8px_rgba(233,69,96,0.3)]' : 'bg-transparent text-slate-600 hover:bg-white/60 hover:text-slate-800'"
+            :class="activeTab === 'wallpapers' ? 'bg-[#e94560] text-white shadow-[0_2px_8px_rgba(233,69,96,0.3)]' : 'bg-white/70 text-slate-600 hover:bg-white hover:text-slate-800 shadow-sm'"
             @click="activeTab = 'wallpapers'"
           >
             <Icon name="photo" class="w-4 h-4 inline mr-1" />壁纸
