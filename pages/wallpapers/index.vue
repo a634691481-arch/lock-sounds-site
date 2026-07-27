@@ -3,8 +3,8 @@
     class="min-h-screen relative"
     style="background: linear-gradient(135deg,#fef2f2 0%,#fdf2f8 25%,#faf5ff 50%,#eff6ff 75%,#f0fdf4 100%)"
   >
-    <!-- Scroll progress bar -->
-    <div class="fixed top-0 left-0 z-[300] h-1" :style="{ width: scrollProgress + '%', background: 'linear-gradient(90deg, #e94560, #f59e0b, #eab308, #22c55e, #06b6d4, #8b5cf6, #e94560)', backgroundSize: '200% 100%', animation: 'rainbow 2s linear infinite' }" />
+    <AppFab @feedback="showFeedback = true" />
+
     <!-- Decorative blobs -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
       <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-pink-300/20 blur-3xl" />
@@ -46,12 +46,14 @@
     <footer class="max-w-6xl mx-auto px-5 pb-8 pt-4 text-center text-xs text-slate-400 relative z-10">
       <p>车机壁纸分享平台 &copy; {{ new Date().getFullYear() }} — 高清车机壁纸免费在线预览下载</p>
     </footer>
+
+    <FeedbackModal v-model="showFeedback" />
   </div>
 </template>
 
 <script setup lang="ts">
 const search = ref('')
-const scrollProgress = ref(0)
+const showFeedback = ref(false)
 
 useSeoMeta({
   title: '车机壁纸分享平台 - 高清车机壁纸免费在线预览下载',
@@ -60,24 +62,4 @@ useSeoMeta({
   ogDescription: '高清车机壁纸免费在线预览下载',
   ogType: 'website',
 })
-
-function updateScrollProgress() {
-  const h = document.documentElement.scrollHeight - window.innerHeight
-  scrollProgress.value = h > 0 ? (window.scrollY / h) * 100 : 0
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', updateScrollProgress, { passive: true })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', updateScrollProgress)
-})
 </script>
-
-<style>
-@keyframes rainbow {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-}
-</style>
