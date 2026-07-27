@@ -30,26 +30,20 @@
         </div>
 
         <!-- Bottom bar -->
-        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 flex-wrap justify-center">
-          <div class="flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1.5">
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 justify-center">
+          <div class="flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-2 py-1.5">
+            <button class="flex items-center gap-1 px-3 py-1 bg-[#e94560] hover:bg-[#d63850] border-none text-white rounded-full text-xs font-semibold cursor-pointer transition-colors" @click.stop="handleDownload">
+              <Icon name="arrow-down-tray" class="w-3 h-3" />下载
+            </button>
+            <span class="text-white/20 mx-0.5">|</span>
             <button class="bg-transparent border-none text-white/70 hover:text-white cursor-pointer w-7 h-7 flex items-center justify-center text-base" @click="zoomOut">−</button>
             <span class="text-white/80 text-xs min-w-[42px] text-center tabular-nums">{{ Math.round(scale * 100) }}%</span>
             <button class="bg-transparent border-none text-white/70 hover:text-white cursor-pointer w-7 h-7 flex items-center justify-center text-base" @click="zoomIn">+</button>
-            <span class="text-white/20 mx-1">|</span>
+            <span class="text-white/20 mx-0.5">|</span>
             <button class="bg-transparent border-none text-white/70 hover:text-white cursor-pointer w-7 h-7 flex items-center justify-center text-xs" @click="resetZoom">1:1</button>
           </div>
 
-          <span class="text-white/50 text-xs mx-1 hidden sm:inline">{{ wallpaper.title }}</span>
-
-          <a
-            :href="fullSrc"
-            :download="`${wallpaper.title}.png`"
-            class="flex items-center gap-1.5 px-4 py-1.5 bg-[#e94560] hover:bg-[#d63850] text-white rounded-full text-sm font-semibold no-underline transition-colors cursor-pointer"
-            @click.stop="handleDownload"
-          >
-            <Icon name="arrow-down-tray" class="w-4 h-4" />
-            下载
-          </a>
+          <span class="text-white/50 text-xs hidden sm:inline max-w-[160px] truncate">{{ wallpaper.title }}</span>
         </div>
       </div>
     </Transition>
