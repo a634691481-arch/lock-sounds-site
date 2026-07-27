@@ -23,6 +23,8 @@
             :alt="wallpaper.title"
             :style="imageStyle"
             draggable="false"
+            loading="lazy"
+            decoding="async"
             class="select-none max-w-full max-h-full"
           />
         </div>

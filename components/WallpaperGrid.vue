@@ -96,6 +96,7 @@
               :src="w.thumb"
               :alt="w.title"
               loading="lazy"
+              decoding="async"
               class="w-full h-full object-cover transition-transform duration-500 ease-out-quint group-hover:scale-105"
             />
           </div>

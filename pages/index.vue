@@ -272,16 +272,9 @@
 <script setup lang="ts">
 import type { Sound, Category, SortType } from "~/types/sound";
 
-let gsap: any = null
-let ScrollTrigger: any = null
-
-async function loadGSAP() {
-  if (gsap) return
-  const mod = await import('gsap')
-  gsap = mod.default
-  ScrollTrigger = (await import('gsap/ScrollTrigger')).ScrollTrigger
-  gsap.registerPlugin(ScrollTrigger)
-}
+const nuxtApp = useNuxtApp()
+const gsap = computed(() => nuxtApp.$gsap as any)
+const ScrollTrigger = computed(() => nuxtApp.$ScrollTrigger as any)
 
 const RECENT_KEY = "lock-sounds-recent";
 const MAX_RECENT = 20;
@@ -315,8 +308,13 @@ useSeoMeta({
 })
 
 useHead({
-  link: [{ rel: 'canonical', href: 'https://lock-sounds.vercel.app' }],
+  link: [{ rel: 'canonical', href: 'https://lock.moon.vip' }],
   script: [{
+    type: 'speculationrules',
+    innerHTML: JSON.stringify({
+      prerender: [{ where: { href_matches: '/wallpapers' }, eagerness: 'moderate' }]
+    }),
+  }, {
     type: 'application/ld+json',
     innerHTML: JSON.stringify({
       '@context': 'https://schema.org',
@@ -527,16 +525,15 @@ onMounted(() => {
 onUnmounted(() => {
   player.stop();
   window.removeEventListener("keydown", onKeydown);
-  if (ScrollTrigger) ScrollTrigger.getAll().forEach((t: any) => t.kill())
+  if (ScrollTrigger.value) ScrollTrigger.value.getAll().forEach((t: any) => t.kill())
 });
 
 // GSAP scroll-triggered card entrance
-watch(sounds, async () => {
-  await loadGSAP()
+watch(sounds, () => {
   nextTick(() => {
     const elements = Object.values(cardRefs.value)
-    if (!elements.length) return
-    gsap.fromTo(elements, 
+    if (!elements.length || !gsap.value) return
+    gsap.value.fromTo(elements, 
       { opacity: 0, y: 40, filter: 'blur(6px)' },
       {
         opacity: 1, y: 0, filter: 'blur(0px)',

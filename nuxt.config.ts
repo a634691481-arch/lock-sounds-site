@@ -1,8 +1,10 @@
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: ['@nuxtjs/tailwindcss', '@vite-pwa/nuxt'],
   css: ['~/assets/css/main.css'],
   compatibilityDate: '2026-07-24',
+  sourcemap: { client: false, server: false },
+  experimental: { viewTransition: true },
 
   pwa: {
     registerType: 'autoUpdate',
@@ -68,9 +70,9 @@ export default defineNuxtConfig({
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Nunito:wght@400;600;700;800&display=swap' },
+        { rel: 'preload', href: 'https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Nunito:wght@400;600;700;800&display=swap', as: 'style' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Nunito:wght@400;600;700;800&display=swap', media: 'print', onload: 'this.media=\'all\'; this.onload=null' },
         { rel: 'preconnect', href: 'https://cdn.jsdelivr.net' },
-        { rel: 'dns-prefetch', href: 'https://cdn.jsdelivr.net' },
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
         { rel: 'canonical', href: '' },
       ],
