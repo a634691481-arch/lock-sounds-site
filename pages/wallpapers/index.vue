@@ -17,12 +17,9 @@
     <header class="glass sticky top-0 z-50 border-b border-white/30">
       <div class="max-w-6xl mx-auto px-5 py-3">
         <div class="flex items-center gap-3 mb-3">
-          <NuxtLink to="/" class="flex items-center gap-2 text-slate-400 hover:text-[#e94560] transition-colors no-underline text-sm mr-1" title="锁车音效">
-            <Icon name="arrow-left" class="w-4 h-4" />
-          </NuxtLink>
           <span class="text-3xl">🖼️</span>
           <h1 class="text-2xl font-playful tracking-tight">
-            <span class="text-[#e94560]">车机壁纸</span>
+            <NuxtLink to="/" class="text-[#e94560] no-underline hover:opacity-80 transition-opacity">锁车音效</NuxtLink>
             <span class="text-slate-500 text-lg ml-1 font-normal">分享平台</span>
           </h1>
         </div>
