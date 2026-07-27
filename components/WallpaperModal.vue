@@ -1,39 +1,55 @@
 <template>
   <Teleport to="body">
-    <Transition name="modal">
-      <div v-if="wallpaper" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md" @click.self="close">
-        <div class="relative w-full max-w-4xl max-h-[90vh] flex flex-col">
-          <!-- Close button -->
-          <button class="absolute -top-10 right-0 bg-transparent border-none text-white/70 hover:text-white cursor-pointer text-2xl z-10" @click="close"><Icon name="x-mark" class="w-6 h-6" /></button>
+    <Transition name="modal" @after-enter="onModalOpen" @before-leave="onModalClose">
+      <div v-if="wallpaper" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm" @click.self="close">
+        <!-- Top bar -->
+        <div class="absolute top-4 right-4 flex items-center gap-3 z-10">
+          <button class="bg-white/10 hover:bg-white/20 border-none text-white/80 hover:text-white cursor-pointer w-9 h-9 rounded-full flex items-center justify-center transition-colors" title="关闭" @click="close">
+            <Icon name="x-mark" class="w-5 h-5" />
+          </button>
+        </div>
 
-          <!-- Image -->
-          <div class="flex-1 min-h-0 flex items-center justify-center">
-            <img
-              :src="wallpaper.medium"
-              :alt="wallpaper.title"
-              class="max-w-full max-h-[80vh] object-contain rounded-xl shadow-2xl"
-            />
+        <!-- Zoomable image area -->
+        <div
+          ref="imageContainer"
+          class="w-full h-full flex items-center justify-center overflow-hidden cursor-grab"
+          :class="{ 'cursor-grabbing': isDragging }"
+          @wheel.prevent="onWheel"
+          @mousedown="onMouseDown"
+          @mousemove="onMouseMove"
+          @mouseup="onMouseUp"
+          @mouseleave="onMouseUp"
+        >
+          <img
+            :src="fullSrc"
+            :alt="wallpaper.title"
+            :style="imageStyle"
+            draggable="false"
+            class="select-none max-w-full max-h-full"
+          />
+        </div>
+
+        <!-- Bottom controls: zoom + info + download -->
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 flex-wrap justify-center">
+          <div class="flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1.5">
+            <button class="bg-transparent border-none text-white/70 hover:text-white cursor-pointer w-7 h-7 flex items-center justify-center text-base" @click="zoomOut">−</button>
+            <span class="text-white/80 text-xs min-w-[42px] text-center tabular-nums">{{ Math.round(scale * 100) }}%</span>
+            <button class="bg-transparent border-none text-white/70 hover:text-white cursor-pointer w-7 h-7 flex items-center justify-center text-base" @click="zoomIn">+</button>
+            <span class="text-white/20 mx-1">|</span>
+            <button class="bg-transparent border-none text-white/70 hover:text-white cursor-pointer w-7 h-7 flex items-center justify-center text-xs" @click="resetZoom">1:1</button>
           </div>
 
-          <!-- Info bar -->
-          <div class="flex items-center justify-between mt-3 px-2">
-            <div class="text-white/80 text-sm">
-              <span class="font-bold text-white">{{ wallpaper.title }}</span>
-              <span class="mx-2 text-white/30">|</span>
-              <span>{{ wallpaper.width }}×{{ wallpaper.height }}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <a
-                :href="wallpaper.medium"
-                :download="`${wallpaper.title}.jpg`"
-                class="flex items-center gap-1.5 px-4 py-2 bg-[#e94560] hover:bg-[#d63850] text-white rounded-full text-sm font-semibold no-underline transition-colors cursor-pointer"
-                target="_blank"
-              >
-                <Icon name="arrow-down-tray" class="w-4 h-4" />
-                下载壁纸
-              </a>
-            </div>
-          </div>
+          <span class="text-white/50 text-xs mx-1 hidden sm:inline">{{ wallpaper.title }}</span>
+
+          <a
+            :href="fullSrc"
+            :download="`${wallpaper.title}.png`"
+            class="flex items-center gap-1.5 px-4 py-1.5 bg-[#e94560] hover:bg-[#d63850] text-white rounded-full text-sm font-semibold no-underline transition-colors cursor-pointer"
+            target="_blank"
+          >
+            <Icon name="arrow-down-tray" class="w-4 h-4" />
+            下载
+          </a>
         </div>
       </div>
     </Transition>
@@ -45,13 +61,82 @@ import type { Wallpaper } from '~/types/wallpaper'
 
 const wallpaper = defineModel<Wallpaper | null>()
 
-function close() { wallpaper.value = null }
+const imageContainer = ref<HTMLElement | null>(null)
+const scale = ref(1)
+const posX = ref(0)
+const posY = ref(0)
+const isDragging = ref(false)
+let dragStartX = 0, dragStartY = 0, dragStartPosX = 0, dragStartPosY = 0
+
+const MIN_SCALE = 0.3
+const MAX_SCALE = 5
+
+const fullSrc = computed(() => wallpaper.value?.medium || wallpaper.value?.thumb || '')
+
+const imageStyle = computed(() => ({
+  transform: `translate(${posX.value}px, ${posY.value}px) scale(${scale.value})`,
+}))
+
+function clampScale(v: number) { return Math.min(MAX_SCALE, Math.max(MIN_SCALE, v)) }
+function zoomIn() { scale.value = clampScale(scale.value + 0.25) }
+function zoomOut() {
+  const ns = clampScale(scale.value - 0.25)
+  if (ns <= 1) { scale.value = 1; posX.value = 0; posY.value = 0 }
+  else scale.value = ns
+}
+function resetZoom() { scale.value = 1; posX.value = 0; posY.value = 0 }
+
+function onWheel(e: WheelEvent) {
+  const delta = e.deltaY > 0 ? -0.15 : 0.15
+  const ns = clampScale(scale.value + delta)
+  if (imageContainer.value) {
+    const r = imageContainer.value.getBoundingClientRect()
+    const cx = e.clientX - r.left - r.width / 2
+    const cy = e.clientY - r.top - r.height / 2
+    const ratio = ns / scale.value
+    posX.value = (posX.value - cx) * ratio + cx
+    posY.value = (posY.value - cy) * ratio + cy
+  }
+  if (ns <= 1) { scale.value = 1; posX.value = 0; posY.value = 0 }
+  else scale.value = ns
+}
+
+function onMouseDown(e: MouseEvent) {
+  if (scale.value <= 1) return
+  isDragging.value = true
+  dragStartX = e.clientX; dragStartY = e.clientY
+  dragStartPosX = posX.value; dragStartPosY = posY.value
+}
+function onMouseMove(e: MouseEvent) {
+  if (!isDragging.value) return
+  posX.value = dragStartPosX + (e.clientX - dragStartX)
+  posY.value = dragStartPosY + (e.clientY - dragStartY)
+}
+function onMouseUp() { isDragging.value = false }
+
+function onModalOpen() {
+  if (imageContainer.value) {
+    imageContainer.value.requestFullscreen().catch(() => {})
+  }
+}
+
+function onModalClose() {
+  if (document.fullscreenElement) {
+    document.exitFullscreen().catch(() => {})
+  }
+}
+
+function close() {
+  onModalClose()
+  resetZoom()
+  wallpaper.value = null
+}
 </script>
 
 <style scoped>
 .modal-enter-active { transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
 .modal-leave-active { transition: all 0.15s ease-in; }
 .modal-enter-from { opacity: 0; }
-.modal-enter-from > div { opacity: 0; transform: scale(0.92); }
+.modal-enter-from img { opacity: 0; transform: scale(0.9); }
 .modal-leave-to { opacity: 0; }
 </style>

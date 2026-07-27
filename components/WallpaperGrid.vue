@@ -86,7 +86,7 @@
           class="doppelrand shadow-tint group cursor-pointer overflow-hidden"
           @click="preview = w"
         >
-          <div class="aspect-[16/9] bg-slate-100 overflow-hidden">
+          <div class="aspect-[16/9] bg-slate-100 overflow-hidden rounded-xl">
             <img
               :src="w.thumb"
               :alt="w.title"
@@ -126,7 +126,7 @@ const props = defineProps<{ search: string }>()
 const activeCategory = ref('全部')
 const sort = ref('latest')
 const page = ref(1)
-const pageSize = 40
+const pageSize = 60
 const totalCount = ref(0)
 const totalPages = ref(0)
 const wallpapers = ref<Wallpaper[]>([])

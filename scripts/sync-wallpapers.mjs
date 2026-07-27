@@ -1,10 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import probe from 'probe-image-size'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const OUT_PATH = path.resolve(__dirname, '..', 'wallpapers.json')
 const CDN_BASE = 'https://cdn.jsdelivr.net/gh/a634691481-arch/lock-sounds-assets@main/wallpapers'
+const CDN_RAW = 'https://raw.githubusercontent.com/a634691481-arch/lock-sounds-assets/main/wallpapers'
 
 async function fetchRepoTree() {
   const url = 'https://api.github.com/repos/a634691481-arch/lock-sounds-assets/git/trees/main?recursive=1'
@@ -26,47 +28,73 @@ async function main() {
   console.log('Fetching repo tree from GitHub API...')
   const tree = await fetchRepoTree()
 
-  // Filter wallpaper PNG files: wallpapers/{category}/{file}.png
+  // Filter wallpaper image files: wallpapers/{category}/{file}
+  const IMAGE_EXTS = ['.png', '.jpg', '.jpeg', '.webp', '.avif']
   const wpFiles = tree.filter(e => {
     const parts = e.path.split('/')
-    return parts.length === 3 && parts[0] === 'wallpapers' && e.path.toLowerCase().endsWith('.png')
+    const ext = parts[parts.length - 1]?.toLowerCase().replace(/.*\./, '.')
+    return parts.length === 3 && parts[0] === 'wallpapers' && IMAGE_EXTS.includes(ext)
   })
 
-  console.log(`Found ${wpFiles.length} PNG wallpapers in repo`)
+  console.log(`Found ${wpFiles.length} wallpapers in repo`)
 
   const wallpapers = []
   const cats = {}
+  let probed = 0
+  let failed = 0
 
-  for (const entry of wpFiles) {
+  // Build entries first (without dimensions)
+  const entries = wpFiles.map(entry => {
     const parts = entry.path.split('/')
     const category = parts[1]
     const fileName = parts[2]
-    let name = fileName
-      .replace(/\.png$/i, '')
-    // Strip leading hex/MD5 (32+ hex chars followed by Chinese or nothing)
+    const ext = path.extname(fileName)
+    let name = fileName.replace(new RegExp(`\\${ext}$`, 'i'), '')
     name = name.replace(/^[0-9a-fA-F]{20,}(?=[\u4e00-\u9fff])/, '')
-    name = name.replace(/^[0-9a-fA-F]{32}$/, fileName.replace(/\.png$/i, ''))
-    // Strip leading numbers/underscores
+    name = name.replace(/^[0-9a-fA-F]{32}$/, '')
     name = name.replace(/^[\d_]+/, '')
     name = name.trim()
-    if (!name) name = fileName.replace(/\.png$/i, '')
-
+    if (!name) name = fileName.replace(new RegExp(`\\${ext}$`, 'i'), '')
     cats[category] = (cats[category] || 0) + 1
+    return { id: entry.sha.substring(0, 8), category, fileName, name, ext }
+  })
 
-    wallpapers.push({
-      id: entry.sha.substring(0, 8),
-      title: name,
-      category,
-      width: 0,
-      height: 0,
-      thumb: `${CDN_BASE}/${encodeURIComponent(category)}/${encodeURIComponent(fileName)}`,
-      medium: `${CDN_BASE}/${encodeURIComponent(category)}/${encodeURIComponent(fileName)}`,
-      original: `${CDN_BASE}/${encodeURIComponent(category)}/${encodeURIComponent(fileName)}`,
-      downloads: 0,
-      views: 0,
-      date: '2026-07-27',
-    })
+  // Probe dimensions with concurrency limit of 10
+  const CONCURRENCY = 10
+  async function probeOne(e) {
+    const imgUrl = `${CDN_BASE}/${encodeURIComponent(e.category)}/${encodeURIComponent(e.fileName)}`
+    try {
+      const dim = await probe(imgUrl, { timeout: 8000 })
+      probed++
+      return { ...e, width: dim.width, height: dim.height }
+    } catch {
+      failed++
+      return { ...e, width: 0, height: 0 }
+    }
   }
+
+  for (let i = 0; i < entries.length; i += CONCURRENCY) {
+    const batch = entries.slice(i, i + CONCURRENCY)
+    const results = await Promise.all(batch.map(probeOne))
+    for (const e of results) {
+      wallpapers.push({
+        id: e.id,
+        title: e.name,
+        category: e.category,
+        width: e.width,
+        height: e.height,
+        thumb: `${CDN_BASE}/${encodeURIComponent(e.category)}/${encodeURIComponent(e.fileName)}`,
+        medium: `${CDN_BASE}/${encodeURIComponent(e.category)}/${encodeURIComponent(e.fileName)}`,
+        original: `${CDN_BASE}/${encodeURIComponent(e.category)}/${encodeURIComponent(e.fileName)}`,
+        downloads: 0,
+        views: 0,
+        date: '2026-07-27',
+      })
+    }
+    process.stdout.write(`\rProbing: ${Math.min(i + CONCURRENCY, entries.length)}/${entries.length} (${probed} ok, ${failed} failed)`)
+  }
+
+  console.log('')
 
   console.log('\nCategory breakdown:')
   for (const [cat, n] of Object.entries(cats).sort((a, b) => b[1] - a[1])) {
