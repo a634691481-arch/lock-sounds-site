@@ -144,24 +144,7 @@ function selectCategory(cat: string) {
 
 async function fetchCategories() {
   try {
-    const res = await $fetch<{ items: Wallpaper[], total: number }>('/api/wallpapers', {
-      query: { pageSize: 0 }
-    })
-    // Count manually from all data
-    const all = await $fetch<{ items: Wallpaper[], total: number }>('/api/wallpapers', {
-      query: { pageSize: 9999 }
-    })
-    const map: Record<string, number> = {}
-    for (const w of all.items) {
-      map[w.category] = (map[w.category] || 0) + 1
-    }
-    const total = Object.values(map).reduce((s, c) => s + c, 0)
-    categories.value = [
-      { name: '全部', count: total },
-      ...Object.entries(map)
-        .sort((a, b) => b[1] - a[1])
-        .map(([name, count]) => ({ name, count }))
-    ]
+    categories.value = await $fetch<{ name: string; count: number }[]>('/api/wallpapers/categories')
   } catch {}
 }
 
