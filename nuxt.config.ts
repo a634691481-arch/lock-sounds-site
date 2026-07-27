@@ -97,6 +97,9 @@ export default defineNuxtConfig({
         { name: 'robots', content: 'index, follow' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       ],
+      script: [
+        { src: 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js', async: true, defer: true },
+      ],
     },
   },
 

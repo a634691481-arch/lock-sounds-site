@@ -45,6 +45,7 @@
 
     <footer class="max-w-6xl mx-auto px-5 pb-8 pt-4 text-center text-xs text-slate-400 relative z-10">
       <p>车机壁纸分享平台 &copy; {{ new Date().getFullYear() }} — 高清车机壁纸免费在线预览下载</p>
+      <p class="mt-1"><span id="busuanzi_value_site_pv"></span> 次访问 · <span id="busuanzi_value_site_uv"></span> 位访客 · 今日 <span id="busuanzi_value_today_pv"></span></p>
     </footer>
 
     <FeedbackModal v-model="showFeedback" />
