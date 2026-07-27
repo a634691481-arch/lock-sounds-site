@@ -91,7 +91,7 @@
           class="doppelrand shadow-tint group cursor-pointer overflow-hidden"
           @click="preview = w"
         >
-          <div class="aspect-[16/9] bg-slate-100 overflow-hidden">
+          <div class="aspect-[16/9] bg-slate-100 overflow-hidden rounded-xl">
             <img
               :src="w.thumb"
               :alt="w.title"
