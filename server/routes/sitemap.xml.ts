@@ -1,6 +1,6 @@
 import { getSounds } from '~/server/utils/sounds'
 
-const SITE_URL = process.env.SITE_URL || 'https://lock-sounds.vercel.app'
+const SITE_URL = process.env.SITE_URL || 'https://lock.moon.vip'
 
 function escapeXml(s: string) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')

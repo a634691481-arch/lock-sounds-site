@@ -4,3 +4,8 @@ node_modules/
 .nuxt/
 dist/
 *.log
+scraper_env/
+scrape_xhr.py
+try_apis.py
+*_page.html
+matching_items.txt

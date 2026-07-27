@@ -58,6 +58,7 @@
 
         <!-- Row 2: Categories -->
         <div class="flex items-center gap-1.5">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider font-bold flex-shrink-0">分类</span>
           <div class="flex gap-1 overflow-x-auto flex-1 scrollbar-hide">
             <button
               v-for="cat in categories"
@@ -146,10 +147,6 @@ const sortOptions = [
 const categories = ref<{ name: string; count: number }[]>([])
 const hasMore = computed(() => page.value < totalPages.value)
 
-const counts = reactive({ loaded: 0, total: 0 })
-watchEffect(() => { counts.loaded = wallpapers.value.length; counts.total = totalCount.value })
-provide('wallpaperCounts', counts)
-
 const sentinel = useInfiniteScroll(() => {
   if (!loadingMore.value && hasMore.value) loadMore()
 })
@@ -161,7 +158,7 @@ async function fetchWallpapers(reset = true, showLoading = true) {
     error.value = ''
   }
   try {
-    const res = await $fetch<{ items: Wallpaper[]; total: number; totalPages: number }>('/api/wallpapers', {
+    const res = await $fetch<{ data: string }>('/api/wallpapers', {
       query: {
         category: activeCategory.value,
         sort: sort.value,
@@ -170,10 +167,11 @@ async function fetchWallpapers(reset = true, showLoading = true) {
         pageSize
       }
     })
-    if (reset) wallpapers.value = res.items
-    else wallpapers.value.push(...res.items)
-    totalCount.value = res.total
-    totalPages.value = res.totalPages
+    const data = decryptResponse<{ items: Wallpaper[]; total: number; totalPages: number }>(res.data)
+    if (reset) wallpapers.value = data.items
+    else wallpapers.value.push(...data.items)
+    totalCount.value = data.total
+    totalPages.value = data.totalPages
   } catch (e: any) {
     error.value = e?.message || '加载失败'
   }
@@ -203,7 +201,8 @@ function selectCategory(cat: string) {
 
 async function fetchCategories() {
   try {
-    categories.value = await $fetch<{ name: string; count: number }[]>('/api/wallpapers/categories')
+    const res = await $fetch<{ data: string }>('/api/wallpapers/categories')
+    categories.value = decryptResponse<{ name: string; count: number }[]>(res.data)
   } catch {}
 }
 

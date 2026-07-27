@@ -72,9 +72,20 @@ import type { Sound } from '~/types/sound'
 
 const route = useRoute()
 const player = useAudioPlayer()
+const toast = useToast()
 
-const { data, error } = await useFetch<Sound>(`/api/sounds/${route.params.id}`)
-const sound = computed(() => data.value ?? null)
+const sound = ref<Sound | null>(null)
+const loading = ref(true)
+
+onMounted(async () => {
+  try {
+    const res = await $fetch<{ data: string }>(`/api/sounds/${route.params.id}`)
+    sound.value = decryptResponse<Sound>(res.data)
+  } catch {
+    sound.value = null
+  }
+  loading.value = false
+})
 
 const isPlaying = computed(() => player.playingId.value === route.params.id)
 
@@ -123,9 +134,9 @@ function handleDownload() {
 function handleShare() {
   const url = window.location.href
   navigator.clipboard.writeText(url).then(() => {
-    useToast().success('链接已复制到剪贴板')
+    toast.success('链接已复制到剪贴板')
   }).catch(() => {
-    useToast().error('复制失败')
+    toast.error('复制失败')
   })
 }
 </script>

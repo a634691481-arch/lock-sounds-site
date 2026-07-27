@@ -6,10 +6,16 @@ export default defineNuxtConfig({
   sourcemap: { client: false, server: false },
   experimental: { viewTransition: true },
 
+  runtimeConfig: {
+    public: {
+      siteUrl: 'https://lock.moon.vip',
+    },
+  },
+
   pwa: {
     registerType: 'autoUpdate',
     workbox: {
-      globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+      globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,wav,mp3}'],
       runtimeCaching: [
         {
           urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -74,13 +80,14 @@ export default defineNuxtConfig({
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Nunito:wght@400;600;700;800&display=swap', media: 'print', onload: 'this.media=\'all\'; this.onload=null' },
         { rel: 'preconnect', href: 'https://cdn.jsdelivr.net' },
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
-        { rel: 'canonical', href: '' },
+        { rel: 'canonical', href: 'https://lock.moon.vip' },
       ],
       meta: [
         { name: 'description', content: '锁车音效分享平台，海量个性锁车音效免费在线试听和下载。收录哪吒、蜡笔小新、变形金刚、马里奥等650+款热门锁车音效，支持分类筛选和播放。' },
         { name: 'keywords', content: '锁车音效,锁车声音,个性音效,锁车提示音,NFC音效' },
         { property: 'og:title', content: '锁车音效分享平台 - 蔚来乐道L60 川ABQ0326 见到请滴滴' },
         { property: 'og:description', content: '海量个性锁车音效免费试听下载，650+款热门音效每日更新' },
+        { property: 'og:url', content: 'https://lock.moon.vip' },
         { property: 'og:type', content: 'website' },
         { property: 'og:site_name', content: '锁车音效' },
         { property: 'og:locale', content: 'zh_CN' },

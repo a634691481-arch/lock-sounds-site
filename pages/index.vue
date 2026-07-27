@@ -116,8 +116,12 @@
             >
           </div>
 
-          <!-- Row 2: Categories + Recently played -->
+          <!-- Row 2: Categories -->
           <div class="flex items-center gap-1.5">
+            <span
+              class="text-[10px] text-slate-400 uppercase tracking-wider font-bold flex-shrink-0"
+              >分类</span
+            >
             <div ref="categoryScroll" class="flex gap-1 overflow-x-auto flex-1 scrollbar-hide">
               <button
                 v-for="cat in filterTabs"
@@ -245,6 +249,7 @@ import type { Sound, Category, SortType } from "~/types/sound";
 const nuxtApp = useNuxtApp()
 const gsap = computed(() => nuxtApp.$gsap as any)
 const ScrollTrigger = computed(() => nuxtApp.$ScrollTrigger as any)
+const toast = useToast()
 
 const RECENT_KEY = "lock-sounds-recent";
 const MAX_RECENT = 20;
@@ -278,7 +283,6 @@ useSeoMeta({
 })
 
 useHead({
-  link: [{ rel: 'canonical', href: 'https://lock.moon.vip' }],
   script: [{
     type: 'speculationrules',
     innerHTML: JSON.stringify({
@@ -342,9 +346,7 @@ function saveRecent(sound: Sound) {
 async function fetchSounds() {
   try {
     const res = await $fetch<{
-      items: Sound[];
-      total: number;
-      totalPages: number;
+      data: string;
     }>("/api/sounds", {
       query: {
         search: search.value,
@@ -354,11 +356,16 @@ async function fetchSounds() {
         pageSize,
       },
     });
-    sounds.value = res.items;
-    totalCount.value = res.total;
-    totalPages.value = res.totalPages;
+    const data = decryptResponse<{
+      items: Sound[];
+      total: number;
+      totalPages: number;
+    }>(res.data);
+    sounds.value = data.items;
+    totalCount.value = data.total;
+    totalPages.value = data.totalPages;
     if (activeCategory.value === '全部' && !search.value) {
-      grandTotal.value = res.total;
+      grandTotal.value = data.total;
     }
   } catch (e: any) {
     error.value = e?.message || "数据加载失败";
@@ -367,7 +374,8 @@ async function fetchSounds() {
 
 async function fetchCategories() {
   try {
-    categories.value = await $fetch<Category[]>("/api/categories");
+    const res = await $fetch<{ data: string }>("/api/categories");
+    categories.value = decryptResponse<Category[]>(res.data);
   } catch {}
 }
 
@@ -384,7 +392,7 @@ async function loadMore() {
   loadingMore.value = true;
   page.value++;
   try {
-    const res = await $fetch<{ items: Sound[] }>("/api/sounds", {
+    const res = await $fetch<{ data: string }>("/api/sounds", {
       query: {
         search: search.value,
         category: activeCategory.value,
@@ -393,7 +401,8 @@ async function loadMore() {
         pageSize,
       },
     });
-    sounds.value.push(...res.items);
+    const data = decryptResponse<{ items: Sound[] }>(res.data);
+    sounds.value.push(...data.items);
   } catch {}
   loadingMore.value = false;
 }
@@ -420,7 +429,7 @@ function handleDownload(sound: Sound) {
   a.href = player.getAudioUrl(sound);
   a.download = sound.file;
   a.click();
-  useToast().success(`开始下载 ${sound.name}`)
+  toast.success(`开始下载 ${sound.name}`)
 }
 
 function handleDownloadFromPlayer() {
@@ -428,11 +437,12 @@ function handleDownloadFromPlayer() {
 }
 
 function handleShare() {
-  const url = `${window.location.origin}${window.location.pathname}`
+  const id = player.currentSound.value?.id
+  const url = id ? `${window.location.origin}/sounds/${id}` : `${window.location.origin}${window.location.pathname}`
   navigator.clipboard.writeText(url).then(() => {
-    useToast().success('链接已复制到剪贴板')
+    toast.success('链接已复制到剪贴板')
   }).catch(() => {
-    useToast().error('复制失败')
+    toast.error('复制失败')
   })
 }
 
@@ -465,7 +475,7 @@ function onKeydown(e: KeyboardEvent) {
   }
 }
 
-watch([search], () => {
+watch(search, () => {
   page.value = 1;
   fetchSounds();
 });
@@ -517,12 +527,5 @@ watch(sounds, () => {
 @keyframes rainbow {
   0% { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 </style>

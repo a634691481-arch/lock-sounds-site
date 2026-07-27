@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   const res = await $fetch<{ code: number; msg: string }>('https://www.pushplus.plus/send', {
     method: 'POST',
     body: {
-      token: 'c25423061d04431fb9bf8df073ed8e39',
+      token: process.env.PUSHPLUS_TOKEN || 'c25423061d04431fb9bf8df073ed8e39',
       title: '锁车音效 - 用户反馈',
       content: `<pre>${text}</pre>`,
       template: 'html',

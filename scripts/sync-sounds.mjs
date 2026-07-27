@@ -20,7 +20,7 @@ async function fetchAssetsTree() {
 }
 
 function filenameToName(file) {
-  return file.replace(/\.wav$/i, '').trim()
+  return file.replace(/\.wav$/i, '').replace(/^\d{2}-[^_]+_/, '').trim()
 }
 
 function formatSize(bytes) {
