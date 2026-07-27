@@ -5,8 +5,6 @@
   >
     <StatsToast />
     <AppFab @feedback="showFeedback = true" />
-    <!-- busuanzi hidden placeholders -->
-    <div class="hidden"><span id="busuanzi_value_site_pv"></span><span id="busuanzi_value_site_uv"></span><span id="busuanzi_value_today_pv"></span></div>
 
     <!-- Decorative blobs -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
