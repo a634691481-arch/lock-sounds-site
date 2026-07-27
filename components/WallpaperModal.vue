@@ -1,13 +1,11 @@
 <template>
   <Teleport to="body">
-    <Transition name="modal" @after-enter="onModalOpen" @before-leave="onModalClose">
-      <div v-if="wallpaper" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm" @click.self="close">
-        <!-- Top bar -->
-        <div class="absolute top-4 right-4 flex items-center gap-3 z-10">
-          <button class="bg-white/10 hover:bg-white/20 border-none text-white/80 hover:text-white cursor-pointer w-9 h-9 rounded-full flex items-center justify-center transition-colors" title="关闭" @click="close">
-            <Icon name="x-mark" class="w-5 h-5" />
-          </button>
-        </div>
+    <Transition name="modal">
+      <div v-if="wallpaper" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95" @click.self="close">
+        <!-- Close button -->
+        <button class="absolute top-4 right-4 z-10 bg-white/10 hover:bg-white/20 border-none text-white/80 hover:text-white cursor-pointer w-9 h-9 rounded-full flex items-center justify-center transition-colors" title="关闭" @click="close">
+          <Icon name="x-mark" class="w-5 h-5" />
+        </button>
 
         <!-- Zoomable image area -->
         <div
@@ -29,7 +27,7 @@
           />
         </div>
 
-        <!-- Bottom controls: zoom + info + download -->
+        <!-- Bottom bar -->
         <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 flex-wrap justify-center">
           <div class="flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1.5">
             <button class="bg-transparent border-none text-white/70 hover:text-white cursor-pointer w-7 h-7 flex items-center justify-center text-base" @click="zoomOut">−</button>
@@ -114,20 +112,7 @@ function onMouseMove(e: MouseEvent) {
 }
 function onMouseUp() { isDragging.value = false }
 
-function onModalOpen() {
-  if (imageContainer.value) {
-    imageContainer.value.requestFullscreen().catch(() => {})
-  }
-}
-
-function onModalClose() {
-  if (document.fullscreenElement) {
-    document.exitFullscreen().catch(() => {})
-  }
-}
-
 function close() {
-  onModalClose()
   resetZoom()
   wallpaper.value = null
 }
