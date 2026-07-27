@@ -31,7 +31,7 @@
   <!-- Donate modal -->
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="showDonate" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="showDonate = false">
+      <div v-if="showDonate" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="showDonate = false" @keydown.esc="showDonate = false" tabindex="-1" ref="donateModalEl">
         <div class="absolute inset-0 bg-black/20 backdrop-blur-sm" />
         <div class="relative doppelrand shadow-tint w-full max-w-sm">
           <div class="doppelrand-inner p-5 flex flex-col gap-4">
@@ -44,7 +44,7 @@
             </div>
             <div class="text-center">
               <p class="text-slate-600 text-sm mb-4">你的打赏是我开发的动力</p>
-              <div class="bg-slate-50 rounded-xl p-3 mb-2">
+              <div class="bg-white rounded-xl p-2 mb-2 border border-slate-100">
                 <img :src="donateQrSrc" alt="收款二维码" class="w-full aspect-square object-contain" />
               </div>
               <p class="text-slate-400 text-xs">扫一扫赞赏支持</p>
@@ -63,6 +63,11 @@ defineEmits<{ feedback: [] }>()
 const scrollProgress = ref(0)
 const showDonate = ref(false)
 const donateQrSrc = '/donate-qr.png'
+const donateModalEl = ref<HTMLElement | null>(null)
+
+watch(showDonate, (val) => {
+  if (val) nextTick(() => donateModalEl.value?.focus())
+})
 
 function updateScrollProgress() {
   const h = document.documentElement.scrollHeight - window.innerHeight
