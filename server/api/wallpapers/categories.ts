@@ -1,6 +1,6 @@
 import { getWallpapers } from '~/server/utils/wallpapers'
 
-export default defineEventHandler(() => {
+export default defineEventHandler((event) => {
   const wallpapers = getWallpapers()
   const map: Record<string, number> = {}
   for (const w of wallpapers) {
