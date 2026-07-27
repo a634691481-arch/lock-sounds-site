@@ -26,9 +26,10 @@
             <span class="text-slate-500 text-sm sm:text-lg ml-1 font-normal">分享平台</span>
             <span class="hidden sm:inline text-amber-600 text-sm ml-3 font-normal whitespace-nowrap">— 川A·BQ0326 路上看到请滴滴，车友是一家</span>
           </h1>
-          <NuxtLink to="/" class="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/70 hover:bg-[#e94560] hover:text-white text-slate-600 text-xs sm:text-sm font-semibold no-underline transition-all duration-200 shadow-sm whitespace-nowrap">
+           <NuxtLink to="/" class="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/70 hover:bg-[#e94560] hover:text-white text-slate-600 text-xs sm:text-sm font-semibold no-underline transition-all duration-200 shadow-sm whitespace-nowrap">
             <Icon name="play" class="w-4 h-4" />车机音频
           </NuxtLink>
+          <StatsToast />
         </div>
         <div class="relative">
           <Icon name="magnifying-glass" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />

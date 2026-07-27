@@ -7,7 +7,7 @@
   >
     <button
       class="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#e94560] ring-4 ring-white/60 shadow-[0_4px_16px_rgba(233,69,96,0.5)] cursor-pointer text-white text-sm sm:text-lg hover:scale-110 hover:shadow-[0_8px_28px_rgba(233,69,96,0.6)] transition-all duration-300 ease-spring flex items-center justify-center border-none"
-      title="回到顶部"
+      :title="`回到顶部 · 已滚动 ${Math.round(scrollProgress)}%`"
       @click="scrollToTop"
     >
       <Icon name="arrow-up" class="w-5 h-5 sm:w-6 sm:h-6" />
