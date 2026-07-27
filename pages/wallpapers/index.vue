@@ -39,7 +39,7 @@
       </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-5 relative z-10 py-4">
+    <main class="max-w-6xl mx-auto px-5 relative z-10">
       <WallpaperGrid :search="search" />
     </main>
 
