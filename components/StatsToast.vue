@@ -3,18 +3,18 @@
     <Transition name="toast">
       <div
         v-if="visible"
-        class="fixed top-20 right-5 z-[100] max-w-xs glass border border-white/40 rounded-xl p-3.5 shadow-lg"
+        class="fixed top-20 right-5 z-[10000] bg-emerald-500/90 text-white px-5 py-3 rounded-2xl shadow-lg backdrop-blur-md flex flex-col gap-1.5 max-w-xs"
       >
         <div class="flex items-start gap-2">
-          <span class="text-base flex-shrink-0">📊</span>
-          <div class="text-xs text-slate-600 leading-relaxed">
-            <div>总访问 <span class="font-semibold text-slate-800">{{ pv }}</span></div>
-            <div>访客数 <span class="font-semibold text-slate-800">{{ uv }}</span> · 今日 <span class="font-semibold text-slate-800">{{ today }}</span></div>
+          <span class="flex-shrink-0"><Icon name="information-circle" class="w-4 h-4" /></span>
+          <div class="text-sm leading-relaxed">
+            <div>总访问 <span class="font-semibold">{{ pv }}</span></div>
+            <div>访客数 <span class="font-semibold">{{ uv }}</span> · 今日 <span class="font-semibold">{{ today }}</span></div>
           </div>
-          <button class="ml-auto flex-shrink-0 text-slate-400 hover:text-slate-600 transition-colors" @click="dismiss">&times;</button>
+          <button class="ml-auto flex-shrink-0 bg-transparent border-none cursor-pointer text-white/70 hover:text-white text-sm" @click="dismiss"><Icon name="x-mark" class="w-3.5 h-3.5" /></button>
         </div>
-        <div class="mt-2 h-1 rounded-full bg-slate-200 overflow-hidden">
-          <div class="h-full rounded-full bg-[#e94560] transition-all" :style="{ width: progress + '%' }" />
+        <div class="h-1 rounded-full bg-white/20 overflow-hidden">
+          <div class="h-full rounded-full bg-white transition-all" :style="{ width: progress + '%' }" />
         </div>
       </div>
     </Transition>
