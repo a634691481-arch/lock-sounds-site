@@ -7,8 +7,8 @@
       </p>
     </div>
 
-    <!-- Sticky filter bar -->
-    <div class="z-40 -mx-5 px-5 pt-2 pb-2 space-y-3 bg-gradient-to-b backdrop-blur-md sticky top-[140px]">
+    <!-- Filter bar -->
+    <div class="z-40 -mx-5 px-5 pt-2 pb-2 space-y-3 bg-gradient-to-b backdrop-blur-md">
       <!-- Row 1: Sort -->
       <div class="flex items-center gap-2">
         <span class="text-[10px] text-slate-400 uppercase tracking-wider font-bold flex-shrink-0">排序</span>
