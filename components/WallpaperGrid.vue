@@ -1,56 +1,8 @@
 <template>
   <div>
-    <!-- Intro paragraph -->
-    <div class="py-4 text-center">
-      <p class="text-slate-500 text-sm leading-relaxed max-w-2xl mx-auto">
-        车机壁纸分享平台，收录 <strong class="text-[#e94560]">{{ totalCount }}</strong> 张高清车机壁纸。支持在线预览、免费下载，涵盖动漫、人物、自然景色等多种分类，让你的车机屏幕与众不同。
-      </p>
-    </div>
-
-    <!-- Filter bar -->
-    <div class="z-40 -mx-5 px-5 pt-2 pb-2 space-y-3 bg-gradient-to-b backdrop-blur-md">
-      <!-- Row 1: Sort -->
-      <div class="flex items-center gap-2">
-        <span class="text-[10px] text-slate-400 uppercase tracking-wider font-bold flex-shrink-0">排序</span>
-        <button
-          v-for="opt in sortOptions"
-          :key="opt.value"
-          :class="[
-            'px-3 py-1.5 rounded-full text-xs font-semibold border-none cursor-pointer transition-all duration-200',
-            sort === opt.value
-              ? 'bg-[#e94560] text-white shadow-[0_1px_6px_rgba(233,69,96,0.3)]'
-              : 'bg-white/70 text-slate-500 hover:bg-white hover:text-slate-700',
-          ]"
-          @click="sort = opt.value"
-        >
-          {{ opt.label }}
-        </button>
-        <span class="text-[10px] text-slate-300 ml-auto flex-shrink-0">共 {{ totalCount }}</span>
-      </div>
-
-      <!-- Row 2: Categories -->
-      <div class="flex items-center gap-1.5">
-        <div class="flex gap-1 overflow-x-auto flex-1 scrollbar-hide">
-          <button
-            v-for="cat in categories"
-            :key="cat.name"
-            :class="[
-              'px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 border-none cursor-pointer flex-shrink-0',
-              activeCategory === cat.name
-                ? 'bg-[#e94560] text-white shadow-[0_1px_6px_rgba(233,69,96,0.3)]'
-                : 'bg-white/70 text-slate-500 hover:bg-white/90',
-            ]"
-            @click="selectCategory(cat.name)"
-          >
-            {{ cat.name }}<span class="opacity-60 ml-0.5">{{ cat.count }}</span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Loading -->
-    <div v-if="loading" class="py-3">
-      <div class="flex gap-2 pb-2">
+    <!-- Loading skeleton -->
+    <div v-if="loading" class="space-y-4 py-4">
+      <div class="flex gap-2 py-3">
         <div v-for="n in 6" :key="n" class="h-9 w-24 rounded-full bg-white/60 backdrop-blur-sm animate-pulse" />
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -76,6 +28,54 @@
 
     <!-- Content -->
     <template v-else>
+      <!-- Intro paragraph -->
+      <div class="py-4 text-center">
+        <p class="text-slate-500 text-sm leading-relaxed max-w-2xl mx-auto">
+          车机壁纸分享平台，收录 <strong class="text-[#e94560]">{{ totalCount }}</strong> 张高清车机壁纸。支持在线预览、免费下载，涵盖动漫、人物、自然景色等多种分类，让你的车机屏幕与众不同。
+        </p>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="z-40 -mx-5 px-5 pt-2 pb-2 space-y-3 bg-gradient-to-b backdrop-blur-md">
+        <!-- Row 1: Sort -->
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider font-bold flex-shrink-0">排序</span>
+          <button
+            v-for="opt in sortOptions"
+            :key="opt.value"
+            :class="[
+              'px-3 py-1.5 rounded-full text-xs font-semibold border-none cursor-pointer transition-all duration-200',
+              sort === opt.value
+                ? 'bg-[#e94560] text-white shadow-[0_1px_6px_rgba(233,69,96,0.3)]'
+                : 'bg-white/70 text-slate-500 hover:bg-white hover:text-slate-700',
+            ]"
+            @click="sort = opt.value"
+          >
+            {{ opt.label }}
+          </button>
+          <span class="text-[10px] text-slate-300 ml-auto flex-shrink-0">共 {{ totalCount }}</span>
+        </div>
+
+        <!-- Row 2: Categories -->
+        <div class="flex items-center gap-1.5">
+          <div class="flex gap-1 overflow-x-auto flex-1 scrollbar-hide">
+            <button
+              v-for="cat in categories"
+              :key="cat.name"
+              :class="[
+                'px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 border-none cursor-pointer flex-shrink-0',
+                activeCategory === cat.name
+                  ? 'bg-[#e94560] text-white shadow-[0_1px_6px_rgba(233,69,96,0.3)]'
+                  : 'bg-white/70 text-slate-500 hover:bg-white/90',
+              ]"
+              @click="selectCategory(cat.name)"
+            >
+              {{ cat.name }}<span class="opacity-60 ml-0.5">{{ cat.count }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <h2 class="text-lg font-bold text-slate-700 mt-4 mb-2">全部壁纸</h2>
       <template v-if="wallpapers.length === 0">
         <div class="text-center py-32">
@@ -91,7 +91,7 @@
           class="doppelrand shadow-tint group cursor-pointer overflow-hidden"
           @click="preview = w"
         >
-          <div class="aspect-[16/9] bg-slate-100 overflow-hidden rounded-xl">
+          <div class="aspect-[16/9] bg-slate-100 overflow-hidden">
             <img
               :src="w.thumb"
               :alt="w.title"
@@ -131,7 +131,7 @@ const props = defineProps<{ search: string }>()
 const activeCategory = ref('全部')
 const sort = ref('latest')
 const page = ref(1)
-const pageSize = 60
+const pageSize = 40
 const totalCount = ref(0)
 const totalPages = ref(0)
 const wallpapers = ref<Wallpaper[]>([])
