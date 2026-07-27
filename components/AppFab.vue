@@ -37,7 +37,7 @@
           <p class="text-slate-700 font-semibold text-base mb-1">你的打赏是我开发的动力</p>
           <p class="text-slate-400 text-xs mb-4">扫一扫赞赏支持</p>
           <div class="bg-slate-50 rounded-xl p-3 mb-3">
-            <img src="/donate-qr.png" alt="收款二维码" class="w-full aspect-square object-contain" onerror="this.style.display='none'" />
+            <img :src="donateQrSrc" alt="收款二维码" class="w-full aspect-square object-contain" />
           </div>
           <button class="px-5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-500 text-sm rounded-full border-none cursor-pointer transition-colors" @click="showDonate = false">关闭</button>
         </div>
@@ -52,6 +52,7 @@ defineEmits<{ feedback: [] }>()
 
 const scrollProgress = ref(0)
 const showDonate = ref(false)
+const donateQrSrc = '/donate-qr.png'
 
 function updateScrollProgress() {
   const h = document.documentElement.scrollHeight - window.innerHeight
