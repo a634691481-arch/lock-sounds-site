@@ -25,51 +25,21 @@
     <header class="glass sticky top-0 z-50 border-b border-white/30">
       <div class="max-w-6xl mx-auto px-5 py-3">
         <div class="flex items-center gap-3 mb-3">
-          <span class="text-3xl">{{ activeTab === 'sounds' ? '🎵' : '' }}</span><Icon v-if="activeTab === 'wallpapers'" name="rectangle-stack" class="w-7 h-7 inline" />
+          <span class="text-3xl">🎵</span>
           <h1 class="text-2xl font-playful tracking-tight">
-            <span class="text-[#e94560]">{{ activeTab === 'sounds' ? '锁车音效' : '车机壁纸' }}</span>
+            <span class="text-[#e94560]">锁车音效</span>
             <span class="text-slate-500 text-lg ml-1 font-normal">分享平台</span>
             <span class="text-amber-600 text-sm ml-3 font-normal whitespace-nowrap">— 蔚来乐道L60 川A·BQ0326 见到请滴滴</span>
           </h1>
+          <NuxtLink to="/wallpapers" class="ml-auto flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/70 hover:bg-[#e94560] hover:text-white text-slate-600 text-sm font-semibold no-underline transition-all duration-200 shadow-sm whitespace-nowrap">
+            <Icon name="photo" class="w-4 h-4" />车机壁纸
+          </NuxtLink>
         </div>
-        <!-- Tab switch -->
-        <div class="flex rounded-2xl bg-slate-100/50 p-1 gap-1">
-          <button
-            class="flex-1 py-2.5 rounded-xl text-sm font-bold border-none cursor-pointer transition-all duration-300"
-            :class="activeTab === 'sounds' ? 'bg-[#e94560] text-white shadow-[0_2px_8px_rgba(233,69,96,0.3)]' : 'bg-white/70 text-slate-600 hover:bg-white hover:text-slate-800 shadow-sm'"
-            @click="activeTab = 'sounds'"
-          >
-            <Icon name="play" class="w-4 h-4 inline mr-1" />音效
-          </button>
-          <button
-            class="flex-1 py-2.5 rounded-xl text-sm font-bold border-none cursor-pointer transition-all duration-300"
-            :class="activeTab === 'wallpapers' ? 'bg-[#e94560] text-white shadow-[0_2px_8px_rgba(233,69,96,0.3)]' : 'bg-white/70 text-slate-600 hover:bg-white hover:text-slate-800 shadow-sm'"
-            @click="activeTab = 'wallpapers'"
-          >
-            <Icon name="photo" class="w-4 h-4 inline mr-1" />壁纸
-          </button>
-        </div>
-        <SearchBar v-if="activeTab === 'sounds'" v-model="search" class="mt-3" />
-        <div v-if="activeTab === 'wallpapers'" class="relative mt-3">
-          <Icon name="magnifying-glass" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
-          <input
-            v-model="wallpaperSearch"
-            type="text"
-            placeholder="搜索你喜欢的壁纸"
-            class="w-full pl-12 pr-5 py-3.5 bg-white rounded-2xl border-2 border-slate-200 outline-none text-slate-700 text-base placeholder:text-slate-400 shadow-[0_2px_12px_rgba(0,0,0,0.06)] focus:border-[#e94560] focus:shadow-[0_4px_20px_rgba(233,69,96,0.15)] transition-all duration-200"
-          />
-        </div>
+        <SearchBar v-model="search" />
       </div>
     </header>
 
     <main class="max-w-6xl mx-auto px-5 relative z-10">
-      <!-- Wallpaper mode -->
-      <div v-if="activeTab === 'wallpapers'">
-        <WallpaperGrid :search="wallpaperSearch" />
-      </div>
-
-      <!-- Sounds mode -->
-      <template v-else>
       <!-- Loading skeleton -->
       <div v-if="loading" class="space-y-4 py-4">
         <div class="flex gap-2 py-3">
@@ -248,7 +218,6 @@
             }}
           </button>
         </div>
-      </template>
       </template>
     </main>
 
@@ -536,8 +505,6 @@ watch([search], () => {
 const cardRefs = ref<Record<number, HTMLElement>>({})
 const scrollProgress = ref(0)
 const autoPlay = ref(true)
-const activeTab = ref<'sounds' | 'wallpapers'>('sounds')
-const wallpaperSearch = ref('')
 const showFeedback = ref(false)
 
 function updateScrollProgress() {
