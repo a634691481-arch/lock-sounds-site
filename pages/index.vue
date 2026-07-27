@@ -432,12 +432,12 @@ async function loadMore() {
 
 const categoryScroll = ref<HTMLElement | null>(null)
 
-function handleCategorySelect(cat: string, e: MouseEvent) {
+async function handleCategorySelect(cat: string, e: MouseEvent) {
   activeCategory.value = cat;
   page.value = 1;
   loading.value = true;
   error.value = "";
-  Promise.all([fetchSounds(), fetchCategories()]);
+  await Promise.all([fetchSounds(), fetchCategories()]);
   loading.value = false;
   (e.target as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
 }

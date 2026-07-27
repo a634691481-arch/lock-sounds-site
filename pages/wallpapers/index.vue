@@ -45,56 +45,24 @@
     <footer class="max-w-6xl mx-auto px-5 pb-8 pt-4 text-center text-xs text-slate-400 relative z-10">
       <p>车机壁纸分享平台 &copy; {{ new Date().getFullYear() }} — 高清车机壁纸免费在线预览下载</p>
     </footer>
-
-    <AudioPlayer
-      :sound="player.currentSound.value"
-      :is-playing="!!player.playingId.value"
-      :progress="player.progress.value"
-      :time-display="player.timeDisplay.value"
-      :buffered="player.buffered.value"
-      :auto-play="autoPlay"
-      @close="player.stop()"
-      @seek="(v: number) => player.seek(v)"
-      @prev="playPrev"
-      @next="playNext"
-      @pause="player.play(player.currentSound.value!)"
-      @resume="player.play(player.currentSound.value!)"
-      @download="player.currentSound.value && handleDownload(player.currentSound.value)"
-      @share="handleShare"
-      @toggle-auto-play="autoPlay = !autoPlay"
-    />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Sound } from '~/types/sound'
-
 const search = ref('')
 const scrollProgress = ref(0)
-const autoPlay = ref(true)
 
-const player = useAudioPlayer()
+useSeoMeta({
+  title: '车机壁纸分享平台 - 高清车机壁纸免费在线预览下载',
+  description: '车机壁纸分享平台，收录高清车机壁纸。在线预览、免费下载，涵盖动漫、人物、自然景色等多种分类。',
+  ogTitle: '车机壁纸分享平台',
+  ogDescription: '高清车机壁纸免费在线预览下载',
+  ogType: 'website',
+})
 
 function updateScrollProgress() {
   const h = document.documentElement.scrollHeight - window.innerHeight
   scrollProgress.value = h > 0 ? (window.scrollY / h) * 100 : 0
-}
-
-function handleDownload(sound: Sound) {
-  const a = document.createElement('a')
-  a.href = player.getAudioUrl(sound)
-  a.download = sound.file
-  a.click()
-  useToast().success(`开始下载 ${sound.name}`)
-}
-
-function handleShare() {
-  const url = `${window.location.origin}${window.location.pathname}`
-  navigator.clipboard.writeText(url).then(() => {
-    useToast().success('链接已复制到剪贴板')
-  }).catch(() => {
-    useToast().error('复制失败')
-  })
 }
 
 onMounted(() => {
@@ -102,7 +70,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  player.stop()
+  window.removeEventListener('scroll', updateScrollProgress)
 })
 </script>
 
