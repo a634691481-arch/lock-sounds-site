@@ -1,5 +1,17 @@
 <template>
   <div>
+    <!-- Search -->
+    <div class="relative mb-3">
+      <Icon name="magnifying-glass" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+      <input
+        :value="searchQuery"
+        type="text"
+        placeholder="搜索壁纸..."
+        class="w-full pl-12 pr-5 py-3 bg-white rounded-2xl border-2 border-slate-200 outline-none text-slate-700 text-base placeholder:text-slate-400 shadow-[0_2px_12px_rgba(0,0,0,0.06)] focus:border-[#e94560] focus:shadow-[0_4px_20px_rgba(233,69,96,0.15)] transition-all duration-200"
+        @input="onSearchInput"
+      />
+    </div>
+
     <!-- Category tabs -->
     <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
       <button
@@ -25,6 +37,7 @@
         :class="sort === o.value ? 'bg-[#e94560] text-white' : 'bg-white/50 text-slate-500 hover:bg-white/80'"
         @click="sort = o.value"
       >{{ o.label }}</button>
+      <span class="text-[10px] text-slate-300 ml-auto flex-shrink-0">共 {{ totalCount }}</span>
     </div>
 
     <!-- Grid -->
@@ -42,7 +55,7 @@
 
     <div v-else-if="wallpapers.length === 0" class="text-center py-16">
       <div class="flex justify-center mb-4"><Icon name="magnifying-glass" class="w-10 h-10 text-slate-300" /></div>
-      <p class="text-slate-400">该分类暂无壁纸</p>
+      <p class="text-slate-400">没有匹配的壁纸</p>
     </div>
 
     <div v-else class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -74,7 +87,7 @@
         :disabled="loadingMore"
         @click="loadMore"
       >
-        {{ loadingMore ? '加载中...' : `加载更多 (${page}/${totalPages})` }}
+        {{ loadingMore ? '加载中...' : `加载更多 (${wallpapers.length}/${totalCount})` }}
       </button>
     </div>
 
@@ -88,8 +101,10 @@ import type { Wallpaper } from '~/types/wallpaper'
 
 const activeCategory = ref('全部')
 const sort = ref('latest')
+const searchQuery = ref('')
 const page = ref(1)
 const pageSize = 40
+const totalCount = ref(0)
 const totalPages = ref(0)
 const wallpapers = ref<Wallpaper[]>([])
 const loading = ref(true)
@@ -104,8 +119,9 @@ const sortOptions = [
 ]
 
 const categories = ref<{ name: string; count: number }[]>([])
-
 const hasMore = computed(() => page.value < totalPages.value)
+
+let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
 async function fetchWallpapers(reset = true) {
   if (reset) {
@@ -115,13 +131,20 @@ async function fetchWallpapers(reset = true) {
   }
   try {
     const res = await $fetch<{ items: Wallpaper[]; total: number; totalPages: number }>('/api/wallpapers', {
-      query: { category: activeCategory.value, sort: sort.value, page: page.value, pageSize }
+      query: {
+        category: activeCategory.value,
+        sort: sort.value,
+        search: searchQuery.value,
+        page: page.value,
+        pageSize
+      }
     })
     if (reset) {
       wallpapers.value = res.items
     } else {
       wallpapers.value.push(...res.items)
     }
+    totalCount.value = res.total
     totalPages.value = res.totalPages
   } catch (e: any) {
     error.value = e?.message || '加载失败'
@@ -140,6 +163,15 @@ async function loadMore() {
 function selectCategory(cat: string) {
   activeCategory.value = cat
   fetchWallpapers()
+}
+
+function onSearchInput(e: Event) {
+  const val = (e.target as HTMLInputElement).value
+  if (debounceTimer) clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(() => {
+    searchQuery.value = val
+    fetchWallpapers()
+  }, 300)
 }
 
 async function fetchCategories() {
