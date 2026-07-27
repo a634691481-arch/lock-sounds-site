@@ -1,9 +1,9 @@
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="wallpaper" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95" @click.self="close">
+      <div v-if="wallpaper" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95" @click.self="close" @keydown.esc="close" tabindex="-1" ref="modalEl">
         <!-- Close button -->
-        <button class="absolute top-4 right-4 z-10 bg-white/10 hover:bg-white/20 border-none text-white/80 hover:text-white cursor-pointer w-9 h-9 rounded-full flex items-center justify-center transition-colors" title="关闭" @click="close">
+        <button class="absolute top-4 right-4 z-20 bg-white/10 hover:bg-white/20 border-none text-white/80 hover:text-white cursor-pointer w-10 h-10 rounded-full flex items-center justify-center transition-colors" title="关闭 (Esc)" @click.stop="close">
           <Icon name="x-mark" class="w-5 h-5" />
         </button>
 
@@ -43,7 +43,7 @@
             :href="fullSrc"
             :download="`${wallpaper.title}.png`"
             class="flex items-center gap-1.5 px-4 py-1.5 bg-[#e94560] hover:bg-[#d63850] text-white rounded-full text-sm font-semibold no-underline transition-colors cursor-pointer"
-            target="_blank"
+            @click.stop="handleDownload"
           >
             <Icon name="arrow-down-tray" class="w-4 h-4" />
             下载
@@ -59,6 +59,9 @@ import type { Wallpaper } from '~/types/wallpaper'
 
 const wallpaper = defineModel<Wallpaper | null>()
 
+const toast = useToast()
+
+const modalEl = ref<HTMLElement | null>(null)
 const imageContainer = ref<HTMLElement | null>(null)
 const scale = ref(1)
 const posX = ref(0)
@@ -116,6 +119,21 @@ function close() {
   resetZoom()
   wallpaper.value = null
 }
+
+function handleDownload() {
+  if (!wallpaper.value) return
+  const a = document.createElement('a')
+  a.href = fullSrc.value
+  a.download = `${wallpaper.value.title}.png`
+  a.click()
+  toast.success(`正在下载 ${wallpaper.value.title}`)
+}
+
+watch(wallpaper, (val) => {
+  if (val) {
+    nextTick(() => modalEl.value?.focus())
+  }
+})
 </script>
 
 <style scoped>
