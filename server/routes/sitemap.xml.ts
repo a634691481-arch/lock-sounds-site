@@ -8,9 +8,10 @@ function escapeXml(s: string) {
 
 export default defineEventHandler(() => {
   const sounds = getSounds()
+  const soundSlugs = sounds.map(s => `${s.id}-${s.name.toLowerCase().replace(/[^\w\u4e00-\u9fff\s-]/g, '').replace(/[\s_]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`)
   const urls: string[] = [
     SITE_URL,
-    ...sounds.map(s => `${SITE_URL}/sounds/${s.id}`),
+    ...soundSlugs.map(slug => `${SITE_URL}/sounds/${slug}`),
   ]
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

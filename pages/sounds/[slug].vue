@@ -74,19 +74,20 @@ const route = useRoute()
 const player = useAudioPlayer()
 const toast = useToast()
 
+const soundId = computed(() => extractIdFromSlug(route.params.slug as string))
 const sound = ref<Sound | null>(null)
 const loading = ref(true)
 
 onMounted(async () => {
   try {
-    sound.value = await $fetch<Sound>(`/api/sounds/${route.params.id}`)
+    sound.value = await $fetch<Sound>(`/api/sounds/${soundId.value}`)
   } catch {
     sound.value = null
   }
   loading.value = false
 })
 
-const isPlaying = computed(() => player.playingId.value === route.params.id)
+const isPlaying = computed(() => player.playingId.value === soundId.value)
 
 useSeoMeta({
   title: () => sound.value ? `${sound.value.name} - 锁车音效` : '锁车音效',
@@ -99,7 +100,7 @@ useSeoMeta({
 })
 
 useHead(() => ({
-  link: [{ rel: 'canonical', href: `https://lock.moon.vip/sounds/${route.params.id}` }],
+  link: [{ rel: 'canonical', href: sound.value ? `https://lock.moon.vip/sounds/${soundSlug(sound.value)}` : `https://lock.moon.vip/sounds/${soundId.value}` }],
   script: sound.value ? [{
     type: 'application/ld+json',
     innerHTML: JSON.stringify({

@@ -432,8 +432,8 @@ function handleDownloadFromPlayer() {
 }
 
 function handleShare() {
-  const id = player.currentSound.value?.id
-  const url = id ? `${window.location.origin}/sounds/${id}` : `${window.location.origin}${window.location.pathname}`
+  const s = player.currentSound.value
+  const url = s ? `${window.location.origin}/sounds/${soundSlug(s)}` : `${window.location.origin}${window.location.pathname}`
   navigator.clipboard.writeText(url).then(() => {
     toast.success('链接已复制到剪贴板')
   }).catch(() => {

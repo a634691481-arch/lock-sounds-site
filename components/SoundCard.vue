@@ -30,7 +30,7 @@
 
       <!-- Info -->
       <div class="flex-1 min-w-0">
-        <NuxtLink :to="`/sounds/${sound.id}`" class="font-bold text-sm leading-snug truncate text-slate-700 hover:text-[#e94560] transition-colors block no-underline" :title="sound.name">
+        <NuxtLink :to="`/sounds/${soundSlug(sound)}`" class="font-bold text-sm leading-snug truncate text-slate-700 hover:text-[#e94560] transition-colors block no-underline" :title="sound.name">
           {{ sound.name }}
         </NuxtLink>
         <div class="flex items-center gap-2 mt-0.5 text-[11px] text-slate-400/80 whitespace-nowrap overflow-hidden">
@@ -72,7 +72,7 @@ const props = defineProps<{ sound: Sound; isPlaying: boolean; isBuffering: boole
 const toast = useToast()
 
 function onShare() {
-  const url = `${window.location.origin}/sounds/${props.sound.id}`
+  const url = `${window.location.origin}/sounds/${soundSlug(props.sound)}`
   navigator.clipboard.writeText(url).then(() => {
     toast.success('链接已复制到剪贴板')
   }).catch(() => {
