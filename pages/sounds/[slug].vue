@@ -1,70 +1,84 @@
 <template>
-  <div
-    class="min-h-screen relative"
-    style="background: linear-gradient(135deg,#fef2f2 0%,#fdf2f8 25%,#faf5ff 50%,#eff6ff 75%,#f0fdf4 100%)"
-  >
-    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-      <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-pink-300/20 blur-3xl" />
-      <div class="absolute top-1/3 -left-32 w-80 h-80 rounded-full bg-purple-300/15 blur-3xl" />
-    </div>
+  <main class="overflow-x-hidden w-full max-w-full min-h-screen bg-[#09090b]">
+    <AppNav />
 
-    <div class="max-w-2xl mx-auto px-5 pt-20 pb-16 relative z-10">
-      <NuxtLink to="/" class="inline-flex items-center gap-1 text-slate-400 hover:text-[#e94560] text-sm mb-8 transition-colors">
-        <Icon name="arrow-left" class="w-4 h-4 inline" /> 返回列表
+    <div class="max-w-2xl mx-auto px-5 pt-28 pb-16 relative z-10">
+      <NuxtLink to="/" class="inline-flex items-center gap-1.5 text-white/30 hover:text-[#e94560] text-xs font-semibold tracking-wide uppercase mb-10 transition-colors no-underline">
+        <Icon name="arrow-left" class="w-3.5 h-3.5" /> 返回列表
       </NuxtLink>
 
       <template v-if="sound">
-        <div class="doppelrand shadow-tint mb-4">
-          <div class="doppelrand-inner px-6 py-6 flex items-center gap-5">
+        <!-- Sound header card -->
+        <div class="rounded-2xl border border-white/5 p-6 sm:p-8 mb-5" style="background: #12121a;">
+          <div class="flex items-center gap-5">
             <button
-              class="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 border-none cursor-pointer transition-all duration-300 active:scale-90"
-              :class="isPlaying ? 'bg-emerald-400 scale-105' : 'bg-[#e94560]'"
+              class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center flex-shrink-0 border-none cursor-pointer transition-all duration-500 ease-out"
+              :class="isPlaying ? 'bg-emerald-500 scale-105 shadow-lg shadow-emerald-500/30' : 'bg-[#e94560] hover:scale-105 hover:shadow-lg hover:shadow-[#e94560]/30'"
               @click="togglePlay"
             >
-              <Icon :name="isPlaying ? 'pause' : 'play'" class="w-6 h-6 text-white" />
+              <Icon :name="isPlaying ? 'pause' : 'play'" class="w-6 h-6 text-white" :class="isPlaying ? '' : 'ml-0.5'" />
             </button>
             <div class="min-w-0">
-              <h1 class="text-xl font-bold text-slate-800 leading-snug mb-1">{{ sound.name }}</h1>
-              <div class="flex items-center gap-2 text-xs text-slate-400">
+              <h1 class="text-xl sm:text-2xl font-bold text-white leading-snug mb-1.5">{{ sound.name }}</h1>
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-white/30">
                 <span>{{ sound.size }}</span>
-                <span class="text-slate-300">·</span>
+                <span class="text-white/10">|</span>
                 <span>{{ sound.duration }}</span>
-                <span class="text-slate-300">·</span>
-                <span class="flex items-center gap-0.5"><Icon name="play" class="w-3 h-3" /> {{ sound.plays.toLocaleString() }}</span>
-                <span class="text-slate-300">·</span>
-                <span class="flex items-center gap-0.5"><Icon name="arrow-down-tray" class="w-3 h-3" /> {{ sound.downloads.toLocaleString() }}</span>
+                <span class="text-white/10">|</span>
+                <span class="flex items-center gap-1"><Icon name="play" class="w-3 h-3" /> {{ sound.plays.toLocaleString() }}</span>
+                <span class="text-white/10">|</span>
+                <span class="flex items-center gap-1"><Icon name="arrow-down-tray" class="w-3 h-3" /> {{ sound.downloads.toLocaleString() }}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="doppelrand shadow-tint mb-6">
-          <div class="doppelrand-inner px-6 py-4 flex items-center justify-between gap-4">
-            <button class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 text-sm text-slate-500 hover:bg-[#e94560] hover:text-white border-none cursor-pointer transition-all duration-200 active:scale-90"
-              @click="handleShare">
-              <Icon name="arrow-top-right-on-square" class="w-4 h-4" /> 分享链接
-            </button>
-            <button class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 text-sm text-slate-500 hover:bg-[#e94560] hover:text-white border-none cursor-pointer transition-all duration-200 active:scale-90"
-              @click="handleDownload">
-              <Icon name="arrow-down-tray" class="w-4 h-4" /> 下载音效
-            </button>
-          </div>
+        <!-- Actions -->
+        <div class="flex items-center gap-3 mb-10">
+          <button
+            class="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold border border-white/10 text-white/50 hover:text-white hover:border-white/20 hover:bg-white/5 transition-all duration-300"
+            @click="handleShare"
+          >
+            <Icon name="arrow-top-right-on-square" class="w-3.5 h-3.5" /> 分享链接
+          </button>
+          <button
+            class="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold border border-white/10 text-white/50 hover:text-white hover:border-white/20 hover:bg-white/5 transition-all duration-300"
+            @click="handleDownload"
+          >
+            <Icon name="arrow-down-tray" class="w-3.5 h-3.5" /> 下载音效
+          </button>
         </div>
 
         <div class="text-center">
-          <NuxtLink to="/" class="text-sm text-slate-400 hover:text-[#e94560] transition-colors">
-            发现更多锁车音效 <Icon name="arrow-right" class="w-4 h-4 inline" />
+          <NuxtLink to="/" class="text-xs text-white/25 hover:text-[#e94560] transition-colors no-underline">
+            发现更多锁车音效 <Icon name="arrow-right" class="w-3.5 h-3.5 inline" />
           </NuxtLink>
         </div>
       </template>
 
-      <div v-else class="text-center py-24">
-        <div class="flex justify-center mb-4"><Icon name="magnifying-glass" class="w-12 h-12 text-slate-300" /></div>
-        <p class="text-slate-500 text-lg">音效未找到</p>
-        <NuxtLink to="/" class="inline-block mt-4 text-[#e94560] hover:underline">返回首页</NuxtLink>
+      <!-- Not found -->
+      <div v-else-if="!loading" class="text-center py-24">
+        <Icon name="magnifying-glass" class="w-12 h-12 text-white/10 mx-auto mb-4" />
+        <p class="text-white/30 text-lg">音效未找到</p>
+        <NuxtLink to="/" class="inline-block mt-4 text-xs text-[#e94560] hover:underline font-semibold">返回首页</NuxtLink>
       </div>
     </div>
-  </div>
+
+    <!-- Audio player -->
+    <AudioPlayer
+      :sound="player.currentSound.value"
+      :is-playing="!!player.playingId.value"
+      :progress="player.progress.value"
+      :time-display="player.timeDisplay.value"
+      :buffered="player.buffered.value"
+      @close="player.stop()"
+      @seek="(v: number) => player.seek(v)"
+      @pause="sound && player.play(sound)"
+      @resume="sound && player.play(sound)"
+      @download="sound && handleDownload()"
+      @share="handleShare"
+    />
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -81,9 +95,7 @@ const loading = ref(true)
 onMounted(async () => {
   try {
     sound.value = await $fetch<Sound>(`/api/sounds/${soundId.value}`)
-  } catch {
-    sound.value = null
-  }
+  } catch { sound.value = null }
   loading.value = false
 })
 
