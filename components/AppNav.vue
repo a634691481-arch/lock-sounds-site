@@ -22,8 +22,6 @@
           壁纸
         </NuxtLink>
       </div>
-
-      <span />
     </div>
   </nav>
 </template>
