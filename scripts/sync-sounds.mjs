@@ -80,7 +80,7 @@ async function main() {
         existingEntry.size = newSize
         updatedCount++
       }
-      if (existingEntry.category === '未分类' && category !== '未分类') {
+      if (existingEntry.category !== category) {
         existingEntry.category = category
         updatedCount++
       }
