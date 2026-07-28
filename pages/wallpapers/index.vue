@@ -154,11 +154,11 @@ async function fetchWallpapers() {
 
     const data = await $fetch<any>(`/api/wallpapers?${params}`)
     if (page.value === 1) {
-      wallpapers.value = data.wallpapers
+      wallpapers.value = data.items
     } else {
-      wallpapers.value.push(...data.wallpapers)
+      wallpapers.value.push(...data.items)
     }
-    hasMore.value = data.wallpapers.length === pageSize
+    hasMore.value = data.items.length === pageSize
   } catch { /* silent */ } finally { loading.value = false }
 }
 

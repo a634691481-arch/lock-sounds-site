@@ -237,7 +237,7 @@ async function fetchSounds() {
     if (selectedCategory.value) params.set('category', selectedCategory.value)
 
     const data = await $fetch<any>(`/api/sounds?${params}`)
-    sounds.value = data.sounds
+    sounds.value = data.items
     totalPages.value = data.totalPages
   } catch { sounds.value = [] } finally { loading.value = false }
 }
