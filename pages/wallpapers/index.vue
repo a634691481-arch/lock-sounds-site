@@ -30,7 +30,7 @@
     <section id="wallpapers" class="relative py-24 sm:py-32" style="background: #09090b;">
       <div class="max-w-7xl mx-auto px-5">
         <div class="flex flex-col sm:flex-row sm:items-end gap-3 mb-12">
-          <div class="flex-shrink-0 sm:w-1/3 lg:w-auto">
+          <div class="flex-shrink-0 sm:w-[60%] lg:w-auto">
             <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-white/30 font-semibold mb-3">
               Wallpaper Collection
             </p>
