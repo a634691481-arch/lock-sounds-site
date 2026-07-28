@@ -33,11 +33,11 @@
           <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-white/30 font-semibold mb-4">
             音效分类
           </p>
-          <div class="flex flex-col sm:flex-row sm:items-end gap-3">
-            <h2 class="flex-shrink-0 text-2xl sm:text-3xl font-bold text-white leading-tight">
+          <div class="grid grid-cols-[40%_auto] gap-3 items-end">
+            <h2 class="text-2xl sm:text-3xl font-bold text-white leading-tight">
               探索 {{ categories.length }} 个分类
             </h2>
-            <div ref="catScrollRef" class="sm:w-[60%] flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
+            <div ref="catScrollRef" class="min-w-0 flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
             <button
               v-for="cat in categories"
               :key="cat.name"
@@ -181,7 +181,7 @@ function selectCategory(name: string) {
     const btn = catBtnsRef.value[i]
     if (btn && catScrollRef.value) {
       const container = catScrollRef.value
-      const scrollLeft = btn.offsetLeft - container.offsetWidth / 2 + btn.offsetWidth / 2
+      const scrollLeft = Math.max(0, btn.offsetLeft - container.offsetWidth / 2 + btn.offsetWidth / 2)
       container.scrollTo({ left: scrollLeft, behavior: 'smooth' })
     }
   })
