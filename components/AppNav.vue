@@ -1,7 +1,7 @@
 <template>
   <nav
     class="fixed top-0 inset-x-0 z-[200] pointer-events-none pt-4 sm:pt-6 transition-all duration-300"
-    :class="scrolled ? 'bg-[#09090b]/85 backdrop-blur-xl border-b border-white/5' : ''"
+    :class="scrolled ? 'bg-[#09090b]/85 backdrop-blur-xl' : ''"
   >
     <div class="max-w-6xl mx-auto px-5 flex items-center justify-between pointer-events-auto">
       <NuxtLink to="/" class="flex items-center gap-2.5 no-underline group">
