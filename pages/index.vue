@@ -39,6 +39,15 @@
             </h2>
             <div ref="catScrollRef" class="relative min-w-0 flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
             <button
+              class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold border transition-all duration-300"
+              :class="!selectedCategory
+                ? 'bg-[#e94560] text-white border-[#e94560]'
+                : 'text-white/50 border-white/10 hover:text-white hover:border-white/20'"
+              @click="selectCategory('')"
+            >
+              全部 {{ categories.reduce((s,c) => s + c.count, 0) }}
+            </button>
+            <button
               v-for="cat in categories"
               :key="cat.name"
               ref="catBtnsRef"

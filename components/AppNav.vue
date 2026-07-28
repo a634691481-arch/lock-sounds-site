@@ -3,7 +3,7 @@
     class="fixed top-0 inset-x-0 z-[200] pointer-events-none pt-4 sm:pt-6 transition-all duration-300"
     :class="scrolled ? 'bg-[#09090b]/85 backdrop-blur-xl' : ''"
   >
-    <div class="max-w-6xl mx-auto px-5 flex items-center justify-between pointer-events-auto">
+    <div class="max-w-7xl mx-auto px-5 flex items-center justify-between pointer-events-auto">
       <NuxtLink to="/" class="flex items-center gap-2.5 no-underline group">
         <span class="w-9 h-9 rounded-xl bg-[#e94560] flex items-center justify-center text-white text-sm font-black tracking-tighter shadow-lg shadow-[#e94560]/30">L</span>
         <span class="font-playful text-lg text-white drop-shadow-sm">LockSounds</span>

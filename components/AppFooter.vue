@@ -28,7 +28,7 @@
     </div>
 
     <!-- Divider -->
-    <div class="max-w-6xl mx-auto px-5">
+    <div class="max-w-7xl mx-auto px-5">
       <hr class="border-white/5" />
     </div>
 
