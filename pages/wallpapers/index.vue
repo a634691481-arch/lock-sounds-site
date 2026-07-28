@@ -3,7 +3,6 @@
     class="min-h-screen relative"
     style="background: linear-gradient(135deg,#fef2f2 0%,#fdf2f8 25%,#faf5ff 50%,#eff6ff 75%,#f0fdf4 100%)"
   >
-    <StatsToast />
     <AppFab @feedback="showFeedback = true" />
 
     <!-- Decorative blobs -->
@@ -27,7 +26,6 @@
            <NuxtLink to="/" class="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/70 hover:bg-[#e94560] hover:text-white text-slate-600 text-xs sm:text-sm font-semibold no-underline transition-all duration-200 shadow-sm whitespace-nowrap">
             <Icon name="play" class="w-4 h-4" />车机音频
           </NuxtLink>
-          <StatsToast />
         </div>
         <div class="relative">
           <Icon name="magnifying-glass" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />

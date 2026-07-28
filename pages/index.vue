@@ -3,7 +3,6 @@
     class="min-h-screen relative"
     style="background: linear-gradient(135deg,#fef2f2 0%,#fdf2f8 25%,#faf5ff 50%,#eff6ff 75%,#f0fdf4 100%)"
   >
-    <StatsToast />
     <AppFab @feedback="showFeedback = true" :playerActive="!!player.currentSound.value" />
     <!-- Decorative blobs -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
@@ -34,7 +33,6 @@
            <NuxtLink to="/wallpapers" class="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/70 hover:bg-[#e94560] hover:text-white text-slate-600 text-xs sm:text-sm font-semibold no-underline transition-all duration-200 shadow-sm whitespace-nowrap">
             <Icon name="photo" class="w-4 h-4" />车机壁纸
           </NuxtLink>
-          <StatsToast />
         </div>
         <SearchBar v-model="search" />
       </div>
