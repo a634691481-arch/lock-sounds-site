@@ -37,7 +37,7 @@
             <h2 class="text-2xl sm:text-3xl font-bold text-white leading-tight">
               探索 {{ categories.length }} 个分类
             </h2>
-            <div ref="catScrollRef" class="min-w-0 flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
+            <div ref="catScrollRef" class="relative min-w-0 flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
             <button
               v-for="cat in categories"
               :key="cat.name"
