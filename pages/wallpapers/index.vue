@@ -29,8 +29,8 @@
     <!-- Wallpapers section -->
     <section id="wallpapers" class="relative py-24 sm:py-32" style="background: #09090b;">
       <div class="max-w-7xl mx-auto px-5">
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
-          <div>
+        <div class="flex flex-col sm:flex-row sm:items-end gap-3 mb-12">
+          <div class="flex-shrink-0 sm:w-1/3 lg:w-auto">
             <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-white/30 font-semibold mb-3">
               Wallpaper Collection
             </p>
@@ -38,7 +38,7 @@
               探索 {{ categories.length }} 个分类
             </h2>
           </div>
-          <div ref="catScrollRef" class="flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
+          <div ref="catScrollRef" class="flex-1 min-w-0 flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
             <button
               v-for="cat in categories"
               :key="cat.name"
