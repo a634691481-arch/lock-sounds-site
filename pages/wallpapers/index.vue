@@ -116,9 +116,7 @@
 
     <!-- Wallpaper modal -->
     <WallpaperModal
-      v-if="selectedWallpaper"
-      :wallpaper="selectedWallpaper"
-      @close="selectedWallpaper = null"
+      v-model="selectedWallpaper"
     />
 
     <!-- Feedback modal -->
