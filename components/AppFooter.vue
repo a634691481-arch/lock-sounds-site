@@ -33,7 +33,7 @@
     </div>
 
     <!-- Bottom bar -->
-    <div class="max-w-6xl mx-auto px-5 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-5 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
         <span class="w-6 h-6 rounded-md bg-[#e94560] flex items-center justify-center text-white text-[10px] font-black">L</span>
         <span class="text-xs text-white/25">&copy; {{ new Date().getFullYear() }} LockSounds</span>

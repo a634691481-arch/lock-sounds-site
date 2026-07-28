@@ -136,12 +136,16 @@ const catScrollRef = ref<HTMLElement | null>(null)
 const catBtnsRef = ref<any>([])
 
 function selectCategory(name: string) {
-  selectedCategory.value = name === '全部' ? '' : (selectedCategory.value === name ? '' : name)
+  const target = name === '全部' ? '' : name
+  if (selectedCategory.value === target) return
+  selectedCategory.value = target
   nextTick(() => {
+    const container = catScrollRef.value
+    if (!container) return
+    if (!target) { container.scrollTo({ left: 0, behavior: 'smooth' }); return }
     const i = categories.value.findIndex(c => c.name === name)
     const btn = catBtnsRef.value[i]
-    if (btn && catScrollRef.value) {
-      const container = catScrollRef.value
+    if (btn) {
       const scrollLeft = Math.max(0, btn.offsetLeft - container.offsetWidth / 2 + btn.offsetWidth / 2)
       container.scrollTo({ left: scrollLeft, behavior: 'smooth' })
     }

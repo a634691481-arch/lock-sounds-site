@@ -184,12 +184,15 @@ const catScrollRef = ref<HTMLElement | null>(null)
 const catBtnsRef = ref<any>([])
 
 function selectCategory(name: string) {
-  selectedCategory.value = selectedCategory.value === name ? '' : name
+  if (selectedCategory.value === name) return  // already selected
+  selectedCategory.value = name
   nextTick(() => {
+    const container = catScrollRef.value
+    if (!container) return
+    if (!name) { container.scrollTo({ left: 0, behavior: 'smooth' }); return }
     const i = categories.value.findIndex(c => c.name === name)
     const btn = catBtnsRef.value[i]
-    if (btn && catScrollRef.value) {
-      const container = catScrollRef.value
+    if (btn) {
       const scrollLeft = Math.max(0, btn.offsetLeft - container.offsetWidth / 2 + btn.offsetWidth / 2)
       container.scrollTo({ left: scrollLeft, behavior: 'smooth' })
     }
