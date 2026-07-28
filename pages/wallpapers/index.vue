@@ -33,7 +33,7 @@
           <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-white/30 font-semibold mb-4">
             Wallpaper Collection
           </p>
-          <div class="flex flex-nowrap items-end gap-2 sm:gap-3">
+          <div class="flex flex-nowrap items-center gap-2 sm:gap-3">
             <h2 class="flex-shrink-0 whitespace-nowrap text-xl sm:text-3xl font-bold text-white leading-tight">
               探索 {{ categories.length }} 个分类
             </h2>
