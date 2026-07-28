@@ -38,17 +38,17 @@
               探索 {{ categories.length }} 个分类
             </h2>
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
             <button
-              v-for="cat in categories.slice(0, 5)"
+              v-for="cat in categories"
               :key="cat.name"
-              class="px-4 py-2 rounded-full text-xs font-semibold border transition-all duration-300"
+              class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold border transition-all duration-300"
               :class="selectedCategory === cat.name
                 ? 'bg-[#e94560] text-white border-[#e94560]'
                 : 'text-white/50 border-white/10 hover:text-white hover:border-white/20'"
               @click="selectedCategory = selectedCategory === cat.name ? '' : cat.name"
             >
-              {{ cat.name }} ({{ cat.count }})
+              {{ cat.name.replace(/^\d+-/, '') }} {{ cat.count }}
             </button>
           </div>
         </div>
