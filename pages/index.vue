@@ -29,16 +29,15 @@
     <!-- Sounds section -->
     <section id="sounds" class="relative py-24 sm:py-32" style="background: #09090b;">
       <div class="max-w-7xl mx-auto px-5">
-        <div class="flex flex-col sm:flex-row sm:items-end gap-3 mb-12">
-          <div class="flex-shrink-0 sm:w-[60%] lg:w-auto">
-            <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-white/30 font-semibold mb-3">
-              音效分类
-            </p>
-            <h2 class="text-2xl sm:text-3xl font-bold text-white leading-tight">
+        <div class="mb-12">
+          <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-white/30 font-semibold mb-4">
+            音效分类
+          </p>
+          <div class="flex flex-col sm:flex-row sm:items-end gap-3">
+            <h2 class="flex-shrink-0 text-2xl sm:text-3xl font-bold text-white leading-tight">
               探索 {{ categories.length }} 个分类
             </h2>
-          </div>
-          <div ref="catScrollRef" class="flex-1 min-w-0 flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
+            <div ref="catScrollRef" class="sm:w-[60%] flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
             <button
               v-for="cat in categories"
               :key="cat.name"
@@ -51,6 +50,7 @@
             >
               {{ cat.name.replace(/^\d+-/, '') }} {{ cat.count }}
             </button>
+          </div>
           </div>
         </div>
 
