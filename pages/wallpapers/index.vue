@@ -38,15 +38,16 @@
               探索 {{ categories.length }} 个分类
             </h2>
           </div>
-          <div class="flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
+          <div ref="catScrollRef" class="flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
             <button
               v-for="cat in categories"
               :key="cat.name"
+              ref="catBtnsRef"
               class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold border transition-all duration-300"
               :class="!selectedCategory && cat.name === '全部' || selectedCategory === cat.name
                 ? 'bg-[#e94560] text-white border-[#e94560]'
                 : 'text-white/50 border-white/10 hover:text-white hover:border-white/20'"
-              @click="selectedCategory = cat.name === '全部' ? '' : (selectedCategory === cat.name ? '' : cat.name)"
+              @click="selectCategory(cat.name)"
             >
               {{ cat.name }}
             </button>
@@ -131,6 +132,21 @@ const categories = ref<{ name: string; count: number }[]>([])
 const topCategories = ref<string[]>([])
 const hasMore = ref(false)
 const selectedWallpaper = ref<any>(null)
+const catScrollRef = ref<HTMLElement | null>(null)
+const catBtnsRef = ref<any>([])
+
+function selectCategory(name: string) {
+  selectedCategory.value = name === '全部' ? '' : (selectedCategory.value === name ? '' : name)
+  nextTick(() => {
+    const i = categories.value.findIndex(c => c.name === name)
+    const btn = catBtnsRef.value[i]
+    if (btn && catScrollRef.value) {
+      const container = catScrollRef.value
+      const scrollLeft = btn.offsetLeft - container.offsetWidth / 2 + btn.offsetWidth / 2
+      container.scrollTo({ left: scrollLeft, behavior: 'smooth' })
+    }
+  })
+}
 
 function openModal(wp: any) { selectedWallpaper.value = wp }
 
