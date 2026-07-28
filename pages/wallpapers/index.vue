@@ -125,7 +125,7 @@
     <FeedbackModal v-model="showFeedback" />
 
     <!-- AppFab -->
-    <AppFab @feedback="showFeedback = true" />
+    <AppFab />
   </main>
 </template>
 

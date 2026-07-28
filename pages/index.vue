@@ -132,7 +132,7 @@
     <FeedbackModal v-model="showFeedback" />
 
     <!-- AppFab -->
-    <AppFab @feedback="showFeedback = true" :playerActive="!!player.currentSound.value" />
+    <AppFab :playerActive="!!player.currentSound.value" />
 
     <!-- Audio player -->
     <AudioPlayer
