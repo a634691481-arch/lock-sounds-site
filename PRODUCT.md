@@ -20,7 +20,7 @@ web
 
 ## Operating Context
 
-- 服务器：Vercel（SSR），域名 lock.moon.vip
+- 服务器：Vercel（SSR），域名 lock.mooon.vip
 - 资产仓库：GitHub `a634691481-arch/lock-sounds-assets`，通过 jsDelivr CDN 分发
 - 反馈系统：PushPlus API 推送
 - 数据同步：通过 GitHub API 扫描资产仓库生成 sounds.json / wallpapers.json

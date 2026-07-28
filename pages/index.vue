@@ -318,7 +318,7 @@ async function handleDownload(sound: any) {
 function handleShare() {
   const s = player.currentSound.value
   if (!s) return
-  const text = `${s.name} - ${s.category}\n\n来自锁车音效分享平台 lock.moon.vip`
+  const text = `${s.name} - ${s.category}\n\n来自锁车音效分享平台 lock.mooon.vip`
   void navigator.clipboard.writeText(text).then(() => toast.success('已复制分享文案'))
 }
 

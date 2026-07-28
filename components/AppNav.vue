@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="fixed top-0 inset-x-0 z-[200] pointer-events-none pt-4 sm:pt-6 transition-all duration-300"
+    class="fixed top-0 inset-x-0 z-[200] pointer-events-none pt-4 pb-2 sm:pt-6 sm:pb-0 transition-all duration-300"
     :class="scrolled ? 'bg-[#09090b]/85 backdrop-blur-xl' : ''"
   >
     <div class="max-w-7xl mx-auto px-5 flex items-center justify-between pointer-events-auto">

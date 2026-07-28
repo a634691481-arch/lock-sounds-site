@@ -112,7 +112,7 @@ useSeoMeta({
 })
 
 useHead(() => ({
-  link: [{ rel: 'canonical', href: sound.value ? `https://lock.moon.vip/sounds/${soundSlug(sound.value)}` : `https://lock.moon.vip/sounds/${soundId.value}` }],
+  link: [{ rel: 'canonical', href: sound.value ? `https://lock.mooon.vip/sounds/${soundSlug(sound.value)}` : `https://lock.mooon.vip/sounds/${soundId.value}` }],
   script: sound.value ? [{
     type: 'application/ld+json',
     innerHTML: JSON.stringify({
