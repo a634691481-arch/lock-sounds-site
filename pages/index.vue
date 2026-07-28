@@ -267,7 +267,7 @@ async function fetchSounds() {
     const data = await $fetch<any>(`/api/sounds?${params}`)
     sounds.value = data.items
     totalPages.value = data.totalPages
-  } catch { sounds.value = [] } finally { loading.value = false }
+  } catch { sounds.value = [] } finally { loading.value = false; nextTick(() => scrollToSounds()) }
 }
 
 async function fetchCategories() {
