@@ -21,13 +21,6 @@
         >
           壁纸
         </NuxtLink>
-        <NuxtLink
-          to="/sounds"
-          active-class="!bg-[#e94560]/90 !text-white"
-          class="px-4 py-2 rounded-full text-sm font-medium text-white/70 hover:text-white transition-all duration-300 no-underline"
-        >
-          音效
-        </NuxtLink>
       </div>
 
       <span />
