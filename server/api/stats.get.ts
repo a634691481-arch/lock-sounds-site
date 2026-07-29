@@ -11,17 +11,7 @@ export default defineEventHandler(async (event) => {
   date7d.setDate(date7d.getDate() - 7)
   const date7dISO = date7d.toISOString().slice(0, 19).replace('T', ' ')
 
-  const [
-    [pvTodayRow],
-    [pvTotalRow],
-    topPlays,
-    topDownloads,
-    topWallViews,
-    topWallDls,
-    topSearches,
-    todaySummary,
-    hourlyTrend,
-  ] = await Promise.all([
+  const results = await Promise.all([
     pool.execute(`SELECT COUNT(*) as cnt FROM events WHERE event_type = 'pageview' AND created_at >= ?`, [todayISO]),
     pool.execute(`SELECT COUNT(*) as cnt FROM events WHERE event_type = 'pageview'`),
     pool.execute(
@@ -54,11 +44,21 @@ export default defineEventHandler(async (event) => {
     ),
   ])
 
+  const [pvTodayRows] = results[0]
+  const [pvTotalRows] = results[1]
+  const [topPlaysRows] = results[2]
+  const [topDownloadsRows] = results[3]
+  const [topWallViewsRows] = results[4]
+  const [topWallDlsRows] = results[5]
+  const [topSearchesRows] = results[6]
+  const [todaySummaryRows] = results[7]
+  const [hourlyTrendRows] = results[8]
+
   const summary: Record<string, number> = {}
-  ;(todaySummary as any[]).forEach((r: any) => { summary[r.event_type] = Number(r.count) })
+  ;(todaySummaryRows as any[])?.forEach((r: any) => { summary[r.event_type] = Number(r.count) })
 
   const hourly: Record<number, Record<string, number>> = {}
-  ;(hourlyTrend as any[]).forEach((r: any) => {
+  ;(hourlyTrendRows as any[])?.forEach((r: any) => {
     const h = Number(r.hour)
     if (!hourly[h]) hourly[h] = {}
     hourly[h][r.event_type] = Number(r.count)
@@ -76,13 +76,13 @@ export default defineEventHandler(async (event) => {
   setResponseHeader(event, 'Cache-Control', 'no-cache')
 
   return {
-    pv_today: Number((pvTodayRow as any)?.cnt || 0),
-    pv_total: Number((pvTotalRow as any)?.cnt || 0),
-    top_plays: (topPlays as any[]).map(r => ({ id: r.id, name: r.name, count: Number(r.count) })),
-    top_downloads: (topDownloads as any[]).map(r => ({ id: r.id, name: r.name, count: Number(r.count) })),
-    top_wallpaper_views: (topWallViews as any[]).map(r => ({ id: r.id, name: r.name, count: Number(r.count) })),
-    top_wallpaper_downloads: (topWallDls as any[]).map(r => ({ id: r.id, name: r.name, count: Number(r.count) })),
-    top_searches: (topSearches as any[]).map(r => ({ query: r.query, count: Number(r.count) })),
+    pv_today: Number((pvTodayRows as any[])?.[0]?.cnt || 0),
+    pv_total: Number((pvTotalRows as any[])?.[0]?.cnt || 0),
+    top_plays: (topPlaysRows as any[]).map(r => ({ id: r.id, name: r.name, count: Number(r.count) })),
+    top_downloads: (topDownloadsRows as any[]).map(r => ({ id: r.id, name: r.name, count: Number(r.count) })),
+    top_wallpaper_views: (topWallViewsRows as any[]).map(r => ({ id: r.id, name: r.name, count: Number(r.count) })),
+    top_wallpaper_downloads: (topWallDlsRows as any[]).map(r => ({ id: r.id, name: r.name, count: Number(r.count) })),
+    top_searches: (topSearchesRows as any[]).map(r => ({ query: r.query, count: Number(r.count) })),
     today_summary: summary,
     hourly: { labels, pageview: pageviewSeries, play: playSeries },
   }
