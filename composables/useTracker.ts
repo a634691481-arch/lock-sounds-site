@@ -38,6 +38,7 @@ export function useTracker() {
   }
 
   function trackSearch(query: string, resultCount: number) {
+    if (!query) return
     track('search', { search_query: query, result_count: resultCount })
   }
 

@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
       [date7dISO],
     ),
     pool.execute(
-      `SELECT search_query as query, COUNT(*) as count FROM events WHERE event_type = 'search' AND created_at >= ? GROUP BY search_query ORDER BY count DESC LIMIT 15`,
+      `SELECT search_query as query, COUNT(*) as count FROM events WHERE event_type = 'search' AND search_query != '' AND created_at >= ? GROUP BY search_query ORDER BY count DESC LIMIT 15`,
       [date7dISO],
     ),
     pool.execute(
