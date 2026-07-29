@@ -230,6 +230,10 @@ onMounted(async () => {
   await fetchWallpapers()
 })
 
+watch(() => route.query.search, (q) => {
+  if (q) { search.value = q as string }
+})
+
 useSeoMeta({
   title: '车机壁纸分享平台',
   description: '高清车机壁纸免费在线预览下载',

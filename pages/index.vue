@@ -371,6 +371,10 @@ onMounted(() => {
   window.addEventListener('keydown', onKeydown)
 })
 
+watch(() => route.query.search, (q) => {
+  if (q) { search.value = q as string }
+})
+
 onUnmounted(() => {
   player.stop()
   window.removeEventListener('keydown', onKeydown)
