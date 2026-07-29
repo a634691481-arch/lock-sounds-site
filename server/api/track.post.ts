@@ -37,7 +37,6 @@ export default defineEventHandler(async (event) => {
     switch (body.type) {
       case 'sound_play':
         pool.execute(`UPDATE sounds SET plays = plays + 1 WHERE id = ?`, [body.target_id]).catch(() => {})
-        pool.execute(`UPDATE sounds SET downloads = downloads + 1 WHERE id = ?`, [body.target_id]).catch(() => {})
         break
       case 'sound_download':
         pool.execute(`UPDATE sounds SET downloads = downloads + 1 WHERE id = ?`, [body.target_id]).catch(() => {})
