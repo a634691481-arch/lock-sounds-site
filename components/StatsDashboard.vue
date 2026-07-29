@@ -1,6 +1,6 @@
 <template>
   <Teleport to="body">
-    <div class="fixed left-5 bottom-[144px] sm:bottom-[80px] z-[9000]">
+    <div class="fixed left-5 bottom-[144px] sm:bottom-[96px] z-[9000]">
       <!-- Floating button -->
       <button
         class="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#e94560] ring-4 ring-white/60 shadow-[0_4px_16px_rgba(233,69,96,0.5)] cursor-pointer text-white text-sm sm:text-lg hover:scale-110 hover:shadow-[0_8px_28px_rgba(233,69,96,0.6)] transition-all duration-300 ease-out flex items-center justify-center border-none"
@@ -14,7 +14,7 @@
       <Transition name="panel">
         <div v-if="show" class="fixed inset-0 z-[9001]" @click.self="show = false">
           <div
-            class="absolute bottom-0 left-0 sm:bottom-[144px] sm:left-5 w-full sm:w-[520px] max-h-[85vh] sm:max-h-[75vh] bg-[#111118] border border-white/10 rounded-t-2xl sm:rounded-2xl shadow-2xl shadow-black/50 overflow-hidden flex flex-col"
+            class="absolute bottom-0 left-0 sm:bottom-[160px] sm:left-5 w-full sm:w-[520px] max-h-[85vh] sm:max-h-[75vh] bg-[#111118] border border-white/10 rounded-t-2xl sm:rounded-2xl shadow-2xl shadow-black/50 overflow-hidden flex flex-col"
           >
             <!-- Header -->
             <div class="flex items-center justify-between px-5 py-4 border-b border-white/10 flex-shrink-0">
