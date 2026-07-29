@@ -68,9 +68,10 @@
         <!-- Play button overlay -->
         <div
           v-if="card.playable"
-          class="absolute bottom-5 right-5 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#e94560] flex items-center justify-center shadow-lg shadow-[#e94560]/40 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out translate-y-2 group-hover:translate-y-0"
+          class="absolute bottom-5 right-5 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#e94560] flex items-center justify-center shadow-lg shadow-[#e94560]/40 transition-all duration-500 ease-out"
+          :class="activeId === String(card.id) ? 'opacity-100 translate-y-0' : 'opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0'"
         >
-          <Icon name="play" class="w-5 h-5 text-white ml-0.5" />
+          <Icon :name="activeId === String(card.id) ? 'pause' : 'play'" class="w-5 h-5 text-white" :class="activeId === String(card.id) ? '' : 'ml-0.5'" />
         </div>
       </div>
     </div>
@@ -95,5 +96,5 @@ export interface BentoCard {
   onClick?: () => void
 }
 
-defineProps<{ cards: BentoCard[] }>()
+defineProps<{ cards: BentoCard[]; activeId?: string }>()
 </script>

@@ -1,43 +1,41 @@
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="show" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="close" @keydown.esc="close" tabindex="-1" ref="modalEl">
-        <div class="absolute inset-0 bg-black/20 backdrop-blur-sm" />
-        <div class="relative doppelrand shadow-tint w-full max-w-md">
-          <div class="doppelrand-inner p-5 flex flex-col gap-4">
-            <!-- Header -->
+      <div v-if="show" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="close" tabindex="-1">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-md" />
+        <div class="relative w-full max-w-md rounded-2xl border border-white/10 shadow-2xl shadow-black/40" style="background: #14141c;">
+          <div class="p-6 flex flex-col gap-4">
             <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-2.5">
                 <Icon name="chat-bubble-left-ellipsis" class="w-5 h-5 text-[#e94560]" />
-                <span class="font-bold text-slate-700">反馈与建议</span>
+                <span class="font-bold text-white text-base">反馈与建议</span>
               </div>
-              <button class="bg-transparent border-none text-slate-400 hover:text-[#e94560] cursor-pointer text-lg transition-colors" @click="close"><Icon name="x-mark" class="w-4 h-4" /></button>
+              <button class="bg-transparent border-none text-white/30 hover:text-white cursor-pointer transition-colors" @click="close"><Icon name="x-mark" class="w-4 h-4" /></button>
             </div>
 
-            <!-- Form -->
             <div class="flex flex-col gap-3">
               <div>
-                <label class="text-xs text-slate-500 font-semibold mb-1 block">联系方式（选填）</label>
+                <label class="text-xs text-white/40 font-semibold mb-1.5 block">联系方式（选填）</label>
                 <input
                   v-model="contact"
                   type="text"
-                  placeholder="微信/QQ/邮箱，方便我们回复你"
-                  class="w-full px-3 py-2 rounded-xl bg-white/70 border border-white/50 outline-none text-sm text-slate-700 placeholder:text-slate-300 focus:border-[#e94560] transition-colors"
+                  placeholder="微信 / QQ / 邮箱"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 outline-none text-sm text-white placeholder:text-white/15 focus:border-[#e94560]/50 transition-colors"
                 />
               </div>
               <div>
-                <label class="text-xs text-slate-500 font-semibold mb-1 block">反馈内容</label>
+                <label class="text-xs text-white/40 font-semibold mb-1.5 block">反馈内容</label>
                 <textarea
                   v-model="content"
                   rows="4"
                   placeholder="说说你的想法或遇到的问题..."
-                  class="w-full px-3 py-2 rounded-xl bg-white/70 border border-white/50 outline-none text-sm text-slate-700 placeholder:text-slate-300 focus:border-[#e94560] transition-colors resize-none"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 outline-none text-sm text-white placeholder:text-white/15 focus:border-[#e94560]/50 transition-colors resize-none"
                 />
               </div>
               <button
                 :disabled="sending || !content.trim()"
-                class="w-full py-2.5 rounded-full font-semibold text-sm border-none cursor-pointer transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-                :class="sending ? 'bg-slate-300 text-slate-500' : 'bg-[#e94560] text-white hover:bg-[#d63850]'"
+                class="w-full py-2.5 rounded-full font-semibold text-sm border-none cursor-pointer transition-all duration-200 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+                :class="sending ? 'bg-white/10 text-white/30' : 'bg-[#e94560] text-white hover:bg-[#d63850]'"
                 @click="submit"
               >
                 {{ sending ? '发送中...' : '提交反馈' }}

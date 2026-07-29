@@ -69,14 +69,14 @@
         </div>
 
         <!-- Sound bento grid -->
-        <SoundBento v-else :cards="bentoCards" />
+        <SoundBento v-else :cards="bentoCards" :active-id="player.playingId.value || ''" />
 
         <!-- Pagination -->
         <div v-if="totalPages > 1" class="mt-12 flex justify-center items-center gap-3">
           <button
             :disabled="page === 1"
             class="px-5 py-2.5 rounded-full text-sm font-semibold border border-white/10 text-white/60 hover:text-white hover:border-white/20 disabled:opacity-25 disabled:cursor-not-allowed transition-all"
-            @click="page--; fetchSounds()"
+            @click="page--; fetchSounds(); nextTick(scrollToSounds)"
           >
             <Icon name="arrow-left" class="w-4 h-4" />
           </button>
@@ -84,7 +84,7 @@
           <button
             :disabled="page >= totalPages"
             class="px-5 py-2.5 rounded-full text-sm font-semibold border border-white/10 text-white/60 hover:text-white hover:border-white/20 disabled:opacity-25 disabled:cursor-not-allowed transition-all"
-            @click="page++; fetchSounds()"
+            @click="page++; fetchSounds(); nextTick(scrollToSounds)"
           >
             <Icon name="arrow-right" class="w-4 h-4" />
           </button>
@@ -267,7 +267,7 @@ async function fetchSounds() {
     const data = await $fetch<any>(`/api/sounds?${params}`)
     sounds.value = data.items
     totalPages.value = data.totalPages
-  } catch { sounds.value = [] } finally { loading.value = false; nextTick(() => scrollToSounds()) }
+  } catch { sounds.value = [] } finally { loading.value = false }
 }
 
 async function fetchCategories() {
