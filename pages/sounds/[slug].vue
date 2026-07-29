@@ -101,6 +101,8 @@ onMounted(async () => {
   loading.value = false
 })
 
+watchEffect(() => { playerActiveState.value = !!player.currentSound.value })
+
 const isPlaying = computed(() => player.playingId.value === soundId.value)
 
 useSeoMeta({

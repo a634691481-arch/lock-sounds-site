@@ -380,6 +380,8 @@ onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
 })
 
+watchEffect(() => { playerActiveState.value = !!player.currentSound.value })
+
 function playAdjacent(offset: number) {
   if (!player.currentSound.value) return
   const idx = sounds.value.findIndex((s: any) => s.id === player.currentSound.value?.id)

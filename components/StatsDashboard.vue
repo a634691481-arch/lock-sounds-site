@@ -1,6 +1,9 @@
 <template>
   <Teleport to="body">
-    <div class="fixed left-5 bottom-[144px] sm:bottom-[96px] z-[9000]">
+    <div
+      class="fixed left-5 z-[9000]"
+      :class="playerActiveState ? 'bottom-[230px] sm:bottom-[96px]' : 'bottom-[144px] sm:bottom-[96px]'"
+    >
       <!-- Floating button -->
       <button
         class="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#e94560] ring-4 ring-white/60 shadow-[0_4px_16px_rgba(233,69,96,0.5)] cursor-pointer text-white text-sm sm:text-lg hover:scale-110 hover:shadow-[0_8px_28px_rgba(233,69,96,0.6)] transition-all duration-300 ease-out flex items-center justify-center border-none"
