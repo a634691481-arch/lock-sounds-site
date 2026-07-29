@@ -90,22 +90,18 @@
         <!-- Sound bento grid -->
         <SoundBento v-else :cards="bentoCards" :active-id="player.playingId.value || ''" />
 
-        <!-- Pagination -->
-        <div v-if="totalPages > 1" class="mt-12 flex justify-center items-center gap-3">
+        <!-- Load more -->
+        <div v-if="hasMore" class="mt-12 flex justify-center">
           <button
-            :disabled="page === 1"
-            class="px-5 py-2.5 rounded-full text-sm font-semibold border border-white/10 text-white/60 hover:text-white hover:border-white/20 disabled:opacity-25 disabled:cursor-not-allowed transition-all"
-            @click="page--; fetchSounds(); nextTick(scrollToSounds)"
+            :disabled="loading"
+            class="px-8 py-3 rounded-full text-sm font-semibold bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 hover:text-white disabled:opacity-25 transition-all"
+            @click="fetchSounds()"
           >
-            <Icon name="arrow-left" class="w-4 h-4" />
-          </button>
-          <span class="text-xs text-white/30 px-3">{{ page }} / {{ totalPages }}</span>
-          <button
-            :disabled="page >= totalPages"
-            class="px-5 py-2.5 rounded-full text-sm font-semibold border border-white/10 text-white/60 hover:text-white hover:border-white/20 disabled:opacity-25 disabled:cursor-not-allowed transition-all"
-            @click="page++; fetchSounds(); nextTick(scrollToSounds)"
-          >
-            <Icon name="arrow-right" class="w-4 h-4" />
+            <span v-if="loading" class="inline-flex items-center gap-2">
+              <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              加载中...
+            </span>
+            <span v-else>加载更多</span>
           </button>
         </div>
 
@@ -191,12 +187,12 @@ const search = ref('')
 const page = ref(1)
 const pageSize = 60
 const loading = ref(false)
+const hasMore = ref(true)
 const autoPlay = ref(true)
 const showFeedback = ref(false)
 const selectedCategory = ref('')
 
 const sounds = ref<any[]>([])
-const totalPages = ref(0)
 const categories = ref<{ name: string; count: number }[]>([])
 const topTags = ref<string[]>([])
 const catScrollRef = ref<HTMLElement | null>(null)
@@ -284,9 +280,14 @@ async function fetchSounds() {
     if (selectedCategory.value) params.set('category', selectedCategory.value)
 
     const data = await $fetch<any>(`/api/sounds?${params}`)
-    sounds.value = data.items
-    totalPages.value = data.totalPages
-  } catch { sounds.value = [] } finally { loading.value = false }
+    if (page.value === 1) {
+      sounds.value = data.items
+    } else {
+      sounds.value.push(...data.items)
+    }
+    hasMore.value = data.page < data.totalPages
+    if (hasMore.value) page.value++
+  } catch { if (page.value === 1) sounds.value = [] } finally { loading.value = false }
 }
 
 async function fetchCategories() {

@@ -52,11 +52,11 @@
             </button>
           </div>
 
-          <div class="flex flex-nowrap items-center gap-2 sm:gap-3">
-            <h2 class="flex-shrink-0 whitespace-nowrap text-xl sm:text-3xl font-bold text-white leading-tight">
+          <div class="flex items-start justify-between gap-6">
+            <h2 class="flex-shrink-0 whitespace-nowrap text-xl sm:text-3xl font-bold text-white leading-tight mt-1">
               探索 {{ categories.length }} 个分类
             </h2>
-            <div ref="catScrollRef" class="relative min-w-0 flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
+            <div ref="catScrollRef" class="relative w-[60%] min-w-0 flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
             <button
               v-for="cat in categories"
               :key="cat.name"
@@ -102,10 +102,15 @@
         <!-- Load more -->
         <div v-if="hasMore" class="mt-12 text-center">
           <button
-            class="px-10 py-3.5 rounded-full text-sm font-bold border border-white/10 text-white/70 hover:text-white hover:border-white/20 hover:bg-white/5 transition-all duration-300"
-            @click="page++; fetchWallpapers()"
+            :disabled="loading"
+            class="px-10 py-3.5 rounded-full text-sm font-bold border border-white/10 text-white/70 hover:text-white hover:border-white/20 hover:bg-white/5 disabled:opacity-25 transition-all duration-300"
+            @click="fetchWallpapers()"
           >
-            加载更多
+            <span v-if="loading" class="inline-flex items-center gap-2">
+              <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              加载中...
+            </span>
+            <span v-else>加载更多</span>
           </button>
         </div>
 
@@ -186,7 +191,8 @@ async function fetchWallpapers() {
     } else {
       wallpapers.value.push(...data.items)
     }
-    hasMore.value = data.items.length === pageSize
+    hasMore.value = data.page < data.totalPages
+    if (hasMore.value) page.value++
   } catch { /* silent */ } finally { loading.value = false }
 }
 
