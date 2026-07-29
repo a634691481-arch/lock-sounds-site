@@ -1,8 +1,9 @@
 <template>
-  <div class="relative w-full overflow-hidden py-10 select-none" :style="{ background: props.bg || '#0c0c14' }">
+  <div class="relative w-full overflow-hidden py-6 sm:py-10 select-none" :style="{ background: props.bg || '#0c0c14' }">
     <div
       class="flex gap-8 whitespace-nowrap"
-      :style="{ animation: `marquee-${props.speed || 30}s linear infinite` }"
+      style="animation: marquee var(--speed, 30s) linear infinite"
+      :style="{ '--speed': (props.speed || 30) + 's' }"
     >
       <template v-for="i in 2" :key="i">
         <span
@@ -30,7 +31,7 @@ const props = defineProps<{
 </script>
 
 <style scoped>
-@keyframes marquee-30s {
+@keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
