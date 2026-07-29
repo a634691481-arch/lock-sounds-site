@@ -133,6 +133,7 @@
     <!-- Wallpaper modal -->
     <WallpaperModal
       v-model="selectedWallpaper"
+      :list="wallpapers"
     />
 
     <!-- Feedback modal -->
