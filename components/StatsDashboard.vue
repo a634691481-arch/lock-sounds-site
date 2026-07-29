@@ -110,15 +110,6 @@
                 </div>
               </div>
 
-              <!-- Hot searches -->
-              <div v-if="stats?.top_searches?.length" class="bg-white/5 rounded-xl p-4">
-                <p class="text-white/30 text-[10px] uppercase tracking-wider mb-3">热门搜索 (累计)</p>
-                <div class="flex flex-wrap gap-1.5">
-                  <span v-for="(item, i) in stats.top_searches" :key="item.query" class="px-2.5 py-1 rounded-full text-xs cursor-pointer hover:opacity-80 transition-opacity" :class="i === 0 ? 'bg-[#e94560]/40 text-[#e94560]' : 'bg-white/5 text-white/50'" @click="go('/?search=' + encodeURIComponent(item.query))">
-                    {{ item.query }} <span class="opacity-50">×{{ item.count }}</span>
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -157,7 +148,7 @@ async function open() {
 }
 
 function go(url: string) {
-  show.value = false
+  if (window.innerWidth < 640) show.value = false
   navigateTo(url)
 }
 </script>
