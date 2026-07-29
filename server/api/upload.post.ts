@@ -13,6 +13,11 @@ function catchMsg(e: any): string {
 }
 
 export default defineEventHandler(async (event) => {
+  const key = getCookie(event, 'upload_key')
+  const pass = process.env.UPLOAD_PASS
+  const expected = pass ? createHash('md5').update(pass).digest('hex').slice(0, 16) : ''
+  if (!expected || key !== expected) throw createError({ statusCode: 401, message: '没登录，请先输入密码' })
+
   const form = await readMultipartFormData(event)
   if (!form?.length) throw createError({ statusCode: 400, message: '还没选文件呢' })
 

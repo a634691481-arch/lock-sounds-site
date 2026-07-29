@@ -2,7 +2,34 @@
   <main class="min-h-screen bg-[#09090b]">
     <AppNav />
 
-    <div class="max-w-lg mx-auto px-5 pt-32 pb-24">
+    <!-- Password gate -->
+    <div v-if="!authed" class="max-w-sm mx-auto px-5 pt-40 pb-24 text-center">
+      <span class="w-12 h-12 rounded-xl bg-[#e94560]/20 flex items-center justify-center mx-auto mb-6">
+        <Icon name="arrow-down-tray" class="w-6 h-6 text-[#e94560]" />
+      </span>
+      <h1 class="text-xl font-bold text-white mb-2">验证身份</h1>
+      <p class="text-sm text-white/40 mb-8">此页仅限站长访问</p>
+
+      <input
+        v-model="pwd"
+        type="password"
+        placeholder="请输入密码"
+        class="w-full px-4 py-3 rounded-xl bg-white/5 border text-white text-sm outline-none placeholder:text-white/15 text-center mb-4"
+        :class="loginErr ? 'border-red-500/50' : 'border-white/10 focus:border-[#e94560]/50'"
+        @keydown.enter="doLogin"
+      />
+      <p v-if="loginErr" class="text-xs text-red-400 mb-3">{{ loginErr }}</p>
+      <button
+        :disabled="!pwd || loginLoading"
+        class="w-full py-3 rounded-full bg-[#e94560] text-white font-bold text-sm disabled:opacity-30 transition-all"
+        @click="doLogin"
+      >
+        {{ loginLoading ? '验证中...' : '进入' }}
+      </button>
+    </div>
+
+    <!-- Upload form -->
+    <div v-else class="max-w-lg mx-auto px-5 pt-32 pb-24">
       <h1 class="text-2xl font-bold text-white mb-2">上传资源</h1>
       <p class="text-sm text-white/40 mb-10">上传音效或壁纸到 GitHub 仓库，自动写入数据库。</p>
 
@@ -75,7 +102,7 @@
             上传中...
           </span>
         </template>
-        <template v-else-if="state === 'done'">{{ resultUrl ? '已上传，再来一个' : '上传成功' }}</template>
+        <template v-else-if="state === 'done'">已上传</template>
         <template v-else>上传失败，重试</template>
       </button>
 
@@ -102,6 +129,30 @@ const state = ref<'idle' | 'uploading' | 'done' | 'error'>('idle')
 const errorMsg = ref('')
 const resultUrl = ref('')
 const categories = ref<{ name: string; count: number }[]>([])
+const authed = ref(false)
+const pwd = ref('')
+const loginErr = ref('')
+const loginLoading = ref(false)
+
+async function checkAuth() {
+  try {
+    const { authed: ok } = await $fetch<any>('/api/auth')
+    authed.value = ok
+  } catch { authed.value = false }
+}
+
+async function doLogin() {
+  if (!pwd.value || loginLoading.value) return
+  loginLoading.value = true
+  loginErr.value = ''
+  try {
+    await $fetch('/api/auth', { method: 'POST', body: { password: pwd.value } })
+    authed.value = true
+  } catch (e: any) {
+    loginErr.value = e?.data?.message || '验证失败'
+  }
+  loginLoading.value = false
+}
 
 async function loadCategories() {
   try {
@@ -157,6 +208,7 @@ async function upload() {
 
 function reset() {
   file.value = null
+  if (fileInput.value) fileInput.value.value = ''
   title.value = ''
   state.value = 'idle'
   resultUrl.value = ''
@@ -164,5 +216,5 @@ function reset() {
 
 useSeoMeta({ title: '上传资源 - 锁车音效', description: '上传音效和壁纸' })
 
-onMounted(() => loadCategories())
+onMounted(() => { checkAuth(); loadCategories() })
 </script>
