@@ -1,4 +1,5 @@
 import { db } from '~/server/utils/db'
+import { cache } from '~/server/utils/cache'
 
 const SITE_URL = process.env.SITE_URL || 'https://lock.mooon.vip'
 
@@ -6,17 +7,15 @@ function escapeXml(s: string) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
-export default defineEventHandler(async () => {
-  const [rows] = await db().query('SELECT id, name FROM sounds') as any
+export default defineEventHandler(async (event) => {
+  const data = await cache('sitemap', 3600_000, async () => {
+    const [rows] = await db().query('SELECT id, name FROM sounds') as any
+    return rows.map((s: any) =>
+      `${s.id}-${s.name.toLowerCase().replace(/[^\w\u4e00-\u9fff\s-]/g, '').replace(/[\s_]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`
+    )
+  })
 
-  const soundSlugs = rows.map((s: any) =>
-    `${s.id}-${s.name.toLowerCase().replace(/[^\w\u4e00-\u9fff\s-]/g, '').replace(/[\s_]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`
-  )
-
-  const urls = [
-    SITE_URL,
-    ...soundSlugs.map((slug: string) => `${SITE_URL}/sounds/${slug}`),
-  ]
+  const urls = [SITE_URL, ...data.map((slug: string) => `${SITE_URL}/sounds/${slug}`)]
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
