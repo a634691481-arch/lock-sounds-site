@@ -33,6 +33,25 @@
           <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-white/30 font-semibold mb-4">
             音效分类
           </p>
+
+          <!-- Search -->
+          <div class="relative mb-6">
+            <Icon name="magnifying-glass" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25 pointer-events-none" />
+            <input
+              v-model="search"
+              type="text"
+              placeholder="搜索音效..."
+              class="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm outline-none placeholder:text-white/15 focus:border-[#e94560]/50 transition-colors"
+            />
+            <button
+              v-if="search"
+              class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
+              @click="search = ''"
+            >
+              <Icon name="x-mark" class="w-3 h-3 text-white/40" />
+            </button>
+          </div>
+
           <div class="flex items-start justify-between gap-6">
             <h2 class="flex-shrink-0 whitespace-nowrap text-xl sm:text-3xl font-bold text-white leading-tight mt-1">
               探索 {{ categories.length }} 个分类
