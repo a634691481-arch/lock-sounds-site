@@ -14,7 +14,7 @@
       <Transition name="panel">
         <div v-if="show" class="fixed inset-0 z-[9001]" @click.self="show = false">
           <div
-            class="absolute bottom-0 left-0 sm:bottom-24 sm:left-5 w-full sm:w-[520px] max-h-[85vh] sm:max-h-[75vh] bg-[#111118] border border-white/10 rounded-t-2xl sm:rounded-2xl shadow-2xl shadow-black/50 overflow-hidden flex flex-col"
+            class="absolute bottom-0 left-0 sm:bottom-[144px] sm:left-5 w-full sm:w-[520px] max-h-[85vh] sm:max-h-[75vh] bg-[#111118] border border-white/10 rounded-t-2xl sm:rounded-2xl shadow-2xl shadow-black/50 overflow-hidden flex flex-col"
           >
             <!-- Header -->
             <div class="flex items-center justify-between px-5 py-4 border-b border-white/10 flex-shrink-0">
