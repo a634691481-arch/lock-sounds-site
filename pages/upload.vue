@@ -148,6 +148,7 @@ async function upload() {
     const res = await $fetch<any>('/api/upload', { method: 'POST', body: form })
     resultUrl.value = res.url || ''
     state.value = 'done'
+    setTimeout(() => reset(), 1500)
   } catch (e: any) {
     state.value = 'error'
     errorMsg.value = e?.data?.message || e?.message || '上传失败'
