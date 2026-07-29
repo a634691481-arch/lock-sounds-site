@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <div
-      class="fixed left-5 z-[9000]"
+      class="fixed left-5 z-[9000] transition-all duration-300 ease-out"
       :class="playerActiveState ? 'bottom-[300px] sm:bottom-[96px]' : 'bottom-[144px] sm:bottom-[96px]'"
     >
       <!-- Floating button -->
