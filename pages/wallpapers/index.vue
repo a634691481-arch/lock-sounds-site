@@ -72,7 +72,7 @@
               loading="lazy"
               decoding="async"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-[#09090b]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#09090b]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div class="absolute bottom-0 inset-x-0 p-3 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out">
               <p class="text-xs text-white font-medium line-clamp-1">{{ wp.title }}</p>
               <p class="text-[10px] text-white/40 mt-0.5">{{ wp.width }}x{{ wp.height }}</p>
