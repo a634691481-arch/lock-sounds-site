@@ -5,7 +5,7 @@
     <!-- Hero -->
     <HeroSection
       title="让你的锁车声，与众不同"
-      overline="NIO L60 · 2026 Edition · <span style='color:#e94560;font-weight:700'>川A·BQ0326</span> 求偶遇，滴滴即友"
+      overline="NIO L60 · 2026 Edition · <span style='background:linear-gradient(135deg,#e94560,#ff6b8a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:800;filter:drop-shadow(0 0 8px rgba(233,69,96,0.4))'>川A·BQ0326</span> 求偶遇，滴滴即友"
       subtitle="海量个性锁车音效免费在线试听与下载。涵盖网络热梗、动漫游戏、影视剧场等13个分类，共计2038+款音效每日更新。"
       :showCtas="true"
       ctaPrimary="浏览音效"
