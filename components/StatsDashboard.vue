@@ -3,7 +3,7 @@
     <div class="fixed left-5 bottom-[128px] sm:bottom-[72px] z-[9000]">
       <!-- Floating button -->
       <button
-        class="w-10 h-10 rounded-full bg-violet-600 hover:bg-violet-500 shadow-lg shadow-violet-600/30 cursor-pointer text-white text-sm hover:scale-110 transition-all duration-300 flex items-center justify-center border-none"
+        class="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#e94560] ring-4 ring-white/60 shadow-[0_4px_16px_rgba(233,69,96,0.5)] cursor-pointer text-white text-sm sm:text-lg hover:scale-110 hover:shadow-[0_8px_28px_rgba(233,69,96,0.6)] transition-all duration-300 ease-out flex items-center justify-center border-none"
         title="统计看板"
         @click="open"
       >
@@ -19,7 +19,7 @@
             <!-- Header -->
             <div class="flex items-center justify-between px-5 py-4 border-b border-white/10 flex-shrink-0">
               <div class="flex items-center gap-2">
-                <span class="text-violet-400"><Icon name="chart-bar" class="w-5 h-5" /></span>
+                <span class="text-[#e94560]"><Icon name="chart-bar" class="w-5 h-5" /></span>
                 <span class="text-white font-bold text-sm">数据统计</span>
                 <span class="text-white/20 text-xs">实时</span>
               </div>
@@ -64,7 +64,7 @@
                     v-for="(count, i) in stats.hourly.pageview"
                     :key="i"
                     class="flex-1 rounded-t"
-                    :class="i <= currentHour ? 'bg-violet-600/60' : 'bg-white/5'"
+                    :class="i <= currentHour ? 'bg-[#e94560]/60' : 'bg-white/5'"
                     :style="{ height: maxCount ? (count / maxCount) * 100 + '%' : '0%' }"
                     :title="`${i}时: 浏览${count} 播放${stats.hourly.play[i]}`"
                   />
@@ -114,7 +114,7 @@
               <div v-if="stats?.top_searches?.length" class="bg-white/5 rounded-xl p-4">
                 <p class="text-white/30 text-[10px] uppercase tracking-wider mb-3">热门搜索 (7天)</p>
                 <div class="flex flex-wrap gap-1.5">
-                  <span v-for="(item, i) in stats.top_searches" :key="item.query" class="px-2.5 py-1 rounded-full text-xs" :class="i === 0 ? 'bg-violet-600/40 text-violet-300' : 'bg-white/5 text-white/50'">
+                  <span v-for="(item, i) in stats.top_searches" :key="item.query" class="px-2.5 py-1 rounded-full text-xs" :class="i === 0 ? 'bg-[#e94560]/40 text-[#e94560]' : 'bg-white/5 text-white/50'">
                     {{ item.query }} <span class="opacity-50">×{{ item.count }}</span>
                   </span>
                 </div>
