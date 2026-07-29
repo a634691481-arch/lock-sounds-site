@@ -146,6 +146,7 @@
 
 <script setup lang="ts">
 const toast = useToast()
+const tracker = useTracker()
 const showFeedback = ref(false)
 const selectedCategory = ref('')
 const page = ref(1)
@@ -177,7 +178,7 @@ function selectCategory(name: string) {
   })
 }
 
-function openModal(wp: any) { selectedWallpaper.value = wp }
+function openModal(wp: any) { selectedWallpaper.value = wp; tracker.trackWallpaperView(wp) }
 
 async function fetchWallpapers() {
   loading.value = true
@@ -214,7 +215,14 @@ const search = ref('')
 watch(selectedCategory, () => { page.value = 1; fetchWallpapers() })
 watch(search, () => { page.value = 1; fetchWallpapers() })
 
+let searchTimer: ReturnType<typeof setTimeout> | null = null
+watch(search, (val) => {
+  if (searchTimer) clearTimeout(searchTimer)
+  if (val) searchTimer = setTimeout(() => tracker.trackSearch(val, wallpapers.value.length), 800)
+})
+
 onMounted(async () => {
+  tracker.trackPageView()
   await fetchCategories()
   await fetchWallpapers()
 })

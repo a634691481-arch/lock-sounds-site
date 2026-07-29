@@ -80,6 +80,7 @@ import type { Wallpaper } from '~/types/wallpaper'
 
 const wallpaper = defineModel<Wallpaper | null>()
 const props = defineProps<{ list?: Wallpaper[] }>()
+const tracker = useTracker()
 
 const list = computed(() => props.list ?? [])
 const currentIndex = computed(() => {
@@ -161,6 +162,7 @@ function close() {
 
 function handleDownload() {
   if (!wallpaper.value) return
+  tracker.trackWallpaperDownload(wallpaper.value)
   downloadFile(fullSrc.value, `${wallpaper.value.title}.png`)
   toast.success(`正在下载 ${wallpaper.value.title}`)
 }

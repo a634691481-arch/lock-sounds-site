@@ -3,4 +3,5 @@
   <VitePwaManifest />
   <NuxtPage />
   <Toast />
+  <StatsDashboard />
 </template>

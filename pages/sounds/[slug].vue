@@ -87,12 +87,14 @@ import type { Sound } from '~/types/sound'
 const route = useRoute()
 const player = useAudioPlayer()
 const toast = useToast()
+const tracker = useTracker()
 
 const soundId = computed(() => extractIdFromSlug(route.params.slug as string))
 const sound = ref<Sound | null>(null)
 const loading = ref(true)
 
 onMounted(async () => {
+  tracker.trackPageView()
   try {
     sound.value = await $fetch<Sound>(`/api/sounds/${soundId.value}`)
   } catch { sound.value = null }
@@ -132,15 +134,18 @@ useHead(() => ({
 
 function togglePlay() {
   if (!sound.value) return
+  tracker.trackSoundPlay(sound.value)
   player.play(sound.value)
 }
 
 function handleDownload() {
   if (!sound.value) return
+  tracker.trackSoundDownload(sound.value)
   downloadFile(player.getAudioUrl(sound.value), sound.value.file)
 }
 
 function handleShare() {
+  tracker.trackSoundShare(sound.value!)
   const url = window.location.href
   navigator.clipboard.writeText(url).then(() => {
     toast.success('链接已复制到剪贴板')

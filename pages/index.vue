@@ -183,6 +183,7 @@
 <script setup lang="ts">
 const player = useAudioPlayer()
 const toast = useToast()
+const tracker = useTracker()
 const search = ref('')
 const page = ref(1)
 const pageSize = 60
@@ -308,6 +309,7 @@ function loadRecent() {
 const recentSounds = ref<any[]>([])
 
 function playSound(sound: any) {
+  tracker.trackSoundPlay(sound)
   autoPlay.value = true
   player.play(sound)
   const existing = recentSounds.value.filter((s: any) => s.id !== sound.id)
@@ -327,6 +329,7 @@ function playNext() {
 }
 
 async function handleDownload(sound: any) {
+  tracker.trackSoundDownload(sound)
   const url = player.getAudioUrl(sound)
   toast.success('开始下载...')
   const a = document.createElement('a')
@@ -338,6 +341,7 @@ async function handleDownload(sound: any) {
 function handleShare() {
   const s = player.currentSound.value
   if (!s) return
+  tracker.trackSoundShare(s)
   const text = `${s.name} - ${s.category}\n\n来自锁车音效分享平台 lock.mooon.vip`
   void navigator.clipboard.writeText(text).then(() => toast.success('已复制分享文案'))
 }
@@ -349,7 +353,14 @@ function scrollToSounds() {
 watch([search], () => { page.value = 1; fetchSounds() })
 watch(selectedCategory, () => { page.value = 1; fetchSounds() })
 
+let searchTimer: ReturnType<typeof setTimeout> | null = null
+watch(search, (val) => {
+  if (searchTimer) clearTimeout(searchTimer)
+  if (val) searchTimer = setTimeout(() => tracker.trackSearch(val, sounds.value.length), 800)
+})
+
 onMounted(() => {
+  tracker.trackPageView()
   loadRecent()
   fetchCategories()
   fetchSounds()
