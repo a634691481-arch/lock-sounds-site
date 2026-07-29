@@ -23,12 +23,12 @@
 
     <div class="relative z-10 max-w-7xl mx-auto px-5 pt-32 pb-24 sm:pt-44 sm:pb-36 md:pt-52 md:pb-44">
       <div class="max-w-4xl">
-        <p
+          <span
           v-if="props.overline"
-          class="text-xs sm:text-sm tracking-[0.2em] uppercase text-white/50 font-semibold mb-6"
+          class="text-xs sm:text-sm tracking-[0.2em] uppercase text-white/50 font-semibold mb-6 block"
         >
-          {{ props.overline }}
-        </p>
+          <span v-html="props.overline" />
+        </span>
 
         <h1
           class="font-playful text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.92] tracking-tight text-white mb-8"
