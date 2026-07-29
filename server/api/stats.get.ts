@@ -1,6 +1,6 @@
 import { db } from '~/server/utils/db'
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
   const pool = db()
 
   const today = new Date()
