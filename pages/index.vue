@@ -33,11 +33,11 @@
           <p class="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-white/30 font-semibold mb-4">
             音效分类
           </p>
-          <div class="flex flex-nowrap items-center gap-2 sm:gap-3">
-            <h2 class="flex-shrink-0 whitespace-nowrap text-xl sm:text-3xl font-bold text-white leading-tight">
+          <div class="flex items-start justify-between gap-6">
+            <h2 class="flex-shrink-0 whitespace-nowrap text-xl sm:text-3xl font-bold text-white leading-tight mt-1">
               探索 {{ categories.length }} 个分类
             </h2>
-            <div ref="catScrollRef" class="relative min-w-0 flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
+            <div ref="catScrollRef" class="relative w-[60%] min-w-0 flex gap-2 overflow-x-auto flex-nowrap scrollbar-none pb-2 -mb-2">
             <button
               class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold border transition-all duration-300"
               :class="!selectedCategory
