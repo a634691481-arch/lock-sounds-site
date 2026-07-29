@@ -147,6 +147,7 @@
 <script setup lang="ts">
 const toast = useToast()
 const tracker = useTracker()
+const route = useRoute()
 const showFeedback = ref(false)
 const selectedCategory = ref('')
 const page = ref(1)
@@ -223,6 +224,8 @@ watch(search, (val) => {
 
 onMounted(async () => {
   tracker.trackPageView()
+  const q = route.query.search as string
+  if (q) search.value = q
   await fetchCategories()
   await fetchWallpapers()
 })

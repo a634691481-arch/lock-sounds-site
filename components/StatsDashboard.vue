@@ -76,9 +76,9 @@
 
               <!-- Hot plays -->
               <div v-if="stats?.top_plays?.length" class="bg-white/5 rounded-xl p-4">
-                <p class="text-white/30 text-[10px] uppercase tracking-wider mb-3">热门播放 Top 10 (7天)</p>
+                <p class="text-white/30 text-[10px] uppercase tracking-wider mb-3">热门播放 Top 10 (累计)</p>
                 <div class="space-y-1.5">
-                  <div v-for="(item, i) in stats.top_plays" :key="item.id" class="flex items-center gap-2 text-xs">
+                  <div v-for="(item, i) in stats.top_plays" :key="item.id" class="flex items-center gap-2 text-xs cursor-pointer hover:bg-white/5 rounded px-1 py-0.5 -mx-1 transition-colors" @click="go('/?search=' + encodeURIComponent(item.name))">
                     <span class="text-white/20 w-4 text-right tabular-nums flex-shrink-0">{{ i + 1 }}</span>
                     <span class="text-white/80 truncate flex-1">{{ item.name }}</span>
                     <span class="text-white/30 tabular-nums flex-shrink-0">{{ item.count }}</span>
@@ -88,9 +88,9 @@
 
               <!-- Hot downloads -->
               <div v-if="stats?.top_downloads?.length" class="bg-white/5 rounded-xl p-4">
-                <p class="text-white/30 text-[10px] uppercase tracking-wider mb-3">热门下载 Top 10 (7天)</p>
+                <p class="text-white/30 text-[10px] uppercase tracking-wider mb-3">热门下载 Top 10 (累计)</p>
                 <div class="space-y-1.5">
-                  <div v-for="(item, i) in stats.top_downloads" :key="item.id" class="flex items-center gap-2 text-xs">
+                  <div v-for="(item, i) in stats.top_downloads" :key="item.id" class="flex items-center gap-2 text-xs cursor-pointer hover:bg-white/5 rounded px-1 py-0.5 -mx-1 transition-colors" @click="go('/?search=' + encodeURIComponent(item.name))">
                     <span class="text-white/20 w-4 text-right tabular-nums flex-shrink-0">{{ i + 1 }}</span>
                     <span class="text-white/80 truncate flex-1">{{ item.name }}</span>
                     <span class="text-white/30 tabular-nums flex-shrink-0">{{ item.count }}</span>
@@ -100,9 +100,9 @@
 
               <!-- Hot wallpapers -->
               <div v-if="stats?.top_wallpaper_views?.length" class="bg-white/5 rounded-xl p-4">
-                <p class="text-white/30 text-[10px] uppercase tracking-wider mb-3">热门壁纸 Top 10 (7天)</p>
+                <p class="text-white/30 text-[10px] uppercase tracking-wider mb-3">热门壁纸 Top 10 (累计)</p>
                 <div class="space-y-1.5">
-                  <div v-for="(item, i) in stats.top_wallpaper_views" :key="item.id" class="flex items-center gap-2 text-xs">
+                  <div v-for="(item, i) in stats.top_wallpaper_views" :key="item.id" class="flex items-center gap-2 text-xs cursor-pointer hover:bg-white/5 rounded px-1 py-0.5 -mx-1 transition-colors" @click="go('/wallpapers?search=' + encodeURIComponent(item.name))">
                     <span class="text-white/20 w-4 text-right tabular-nums flex-shrink-0">{{ i + 1 }}</span>
                     <span class="text-white/80 truncate flex-1">{{ item.name }}</span>
                     <span class="text-white/30 tabular-nums flex-shrink-0">{{ item.count }}</span>
@@ -112,9 +112,9 @@
 
               <!-- Hot searches -->
               <div v-if="stats?.top_searches?.length" class="bg-white/5 rounded-xl p-4">
-                <p class="text-white/30 text-[10px] uppercase tracking-wider mb-3">热门搜索 (7天)</p>
+                <p class="text-white/30 text-[10px] uppercase tracking-wider mb-3">热门搜索 (累计)</p>
                 <div class="flex flex-wrap gap-1.5">
-                  <span v-for="(item, i) in stats.top_searches" :key="item.query" class="px-2.5 py-1 rounded-full text-xs" :class="i === 0 ? 'bg-[#e94560]/40 text-[#e94560]' : 'bg-white/5 text-white/50'">
+                  <span v-for="(item, i) in stats.top_searches" :key="item.query" class="px-2.5 py-1 rounded-full text-xs cursor-pointer hover:opacity-80 transition-opacity" :class="i === 0 ? 'bg-[#e94560]/40 text-[#e94560]' : 'bg-white/5 text-white/50'" @click="go('/?search=' + encodeURIComponent(item.query))">
                     {{ item.query }} <span class="opacity-50">×{{ item.count }}</span>
                   </span>
                 </div>
@@ -154,6 +154,11 @@ async function open() {
   try {
     stats.value = await $fetch<Stats>('/api/stats')
   } catch { /* silent */ }
+}
+
+function go(url: string) {
+  show.value = false
+  navigateTo(url)
 }
 </script>
 

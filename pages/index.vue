@@ -184,6 +184,7 @@
 const player = useAudioPlayer()
 const toast = useToast()
 const tracker = useTracker()
+const route = useRoute()
 const search = ref('')
 const page = ref(1)
 const pageSize = 60
@@ -361,6 +362,8 @@ watch(search, (val) => {
 
 onMounted(() => {
   tracker.trackPageView()
+  const q = route.query.search as string
+  if (q) search.value = q
   loadRecent()
   fetchCategories()
   fetchSounds()

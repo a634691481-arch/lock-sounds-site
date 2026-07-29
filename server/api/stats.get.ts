@@ -7,32 +7,23 @@ export default defineEventHandler(async (event) => {
   today.setHours(0, 0, 0, 0)
   const todayISO = today.toISOString().slice(0, 19).replace('T', ' ')
 
-  const date7d = new Date(today)
-  date7d.setDate(date7d.getDate() - 7)
-  const date7dISO = date7d.toISOString().slice(0, 19).replace('T', ' ')
-
   const results = await Promise.all([
     pool.execute(`SELECT COUNT(*) as cnt FROM events WHERE event_type = 'pageview' AND created_at >= ?`, [todayISO]),
     pool.execute(`SELECT COUNT(*) as cnt FROM events WHERE event_type = 'pageview'`),
     pool.execute(
-      `SELECT target_id as id, target_name as name, COUNT(*) as count FROM events WHERE event_type = 'sound_play' AND created_at >= ? GROUP BY target_id, target_name ORDER BY count DESC LIMIT 10`,
-      [date7dISO],
+      `SELECT target_id as id, target_name as name, COUNT(*) as count FROM events WHERE event_type = 'sound_play' GROUP BY target_id, target_name ORDER BY count DESC LIMIT 10`,
     ),
     pool.execute(
-      `SELECT target_id as id, target_name as name, COUNT(*) as count FROM events WHERE event_type = 'sound_download' AND created_at >= ? GROUP BY target_id, target_name ORDER BY count DESC LIMIT 10`,
-      [date7dISO],
+      `SELECT target_id as id, target_name as name, COUNT(*) as count FROM events WHERE event_type = 'sound_download' GROUP BY target_id, target_name ORDER BY count DESC LIMIT 10`,
     ),
     pool.execute(
-      `SELECT target_id as id, target_name as name, COUNT(*) as count FROM events WHERE event_type = 'wallpaper_view' AND created_at >= ? GROUP BY target_id, target_name ORDER BY count DESC LIMIT 10`,
-      [date7dISO],
+      `SELECT target_id as id, target_name as name, COUNT(*) as count FROM events WHERE event_type = 'wallpaper_view' GROUP BY target_id, target_name ORDER BY count DESC LIMIT 10`,
     ),
     pool.execute(
-      `SELECT target_id as id, target_name as name, COUNT(*) as count FROM events WHERE event_type = 'wallpaper_download' AND created_at >= ? GROUP BY target_id, target_name ORDER BY count DESC LIMIT 10`,
-      [date7dISO],
+      `SELECT target_id as id, target_name as name, COUNT(*) as count FROM events WHERE event_type = 'wallpaper_download' GROUP BY target_id, target_name ORDER BY count DESC LIMIT 10`,
     ),
     pool.execute(
-      `SELECT search_query as query, COUNT(*) as count FROM events WHERE event_type = 'search' AND search_query != '' AND created_at >= ? GROUP BY search_query ORDER BY count DESC LIMIT 15`,
-      [date7dISO],
+      `SELECT search_query as query, COUNT(*) as count FROM events WHERE event_type = 'search' AND search_query != '' GROUP BY search_query ORDER BY count DESC LIMIT 15`,
     ),
     pool.execute(
       `SELECT event_type, COUNT(*) as count FROM events WHERE created_at >= ? GROUP BY event_type`,
