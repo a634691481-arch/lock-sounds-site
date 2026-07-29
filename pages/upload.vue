@@ -11,12 +11,12 @@
         <button
           class="flex-1 py-2.5 rounded-lg text-sm font-medium transition-all"
           :class="type === 'sound' ? 'bg-[#e94560] text-white' : 'text-white/40 hover:text-white/70'"
-          @click="type = 'sound'; state = 'idle'; loadCategories()"
+          @click="switchType('sound')"
         >音效</button>
         <button
           class="flex-1 py-2.5 rounded-lg text-sm font-medium transition-all"
           :class="type === 'wallpaper' ? 'bg-[#e94560] text-white' : 'text-white/40 hover:text-white/70'"
-          @click="type = 'wallpaper'; state = 'idle'; loadCategories()"
+          @click="switchType('wallpaper')"
         >壁纸</button>
       </div>
 
@@ -109,6 +109,18 @@ async function loadCategories() {
     const data = await $fetch<any>(url)
     categories.value = type.value === 'sound' ? data : data.filter((c: any) => c.name !== '全部')
   } catch { categories.value = [] }
+}
+
+function switchType(t: 'sound' | 'wallpaper') {
+  if (type.value === t) return
+  type.value = t
+  file.value = null
+  if (fileInput.value) fileInput.value.value = ''
+  category.value = ''
+  title.value = ''
+  state.value = 'idle'
+  resultUrl.value = ''
+  loadCategories()
 }
 
 function onDrop(e: DragEvent) {
