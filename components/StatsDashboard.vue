@@ -7,7 +7,7 @@
         title="统计看板"
         @click="open"
       >
-        <Icon name="chart-bar" class="w-5 h-5" />
+        <Icon name="chart-bar" class="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
 
       <!-- Panel -->
