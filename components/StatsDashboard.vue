@@ -2,7 +2,7 @@
   <Teleport to="body">
     <div
       class="fixed left-5 z-[9000]"
-      :class="playerActiveState ? 'bottom-[230px] sm:bottom-[96px]' : 'bottom-[144px] sm:bottom-[96px]'"
+      :class="playerActiveState ? 'bottom-[300px] sm:bottom-[96px]' : 'bottom-[144px] sm:bottom-[96px]'"
     >
       <!-- Floating button -->
       <button
