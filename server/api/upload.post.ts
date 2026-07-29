@@ -11,9 +11,11 @@ export default defineEventHandler(async (event) => {
   for (const f of form) {
     if (f.name && f.filename) {
       fileBuf = Buffer.from(f.data)
-      fileName = Buffer.from(f.filename, 'latin1').toString('utf8')
+      const raw = f.filename
+      fileName = typeof raw === 'string' ? raw : Buffer.from(raw).toString('utf8')
+      fileName = fileName.replace(/[/\\:*?"<>|]/g, '_').replace(/\s+/g, '_')
     } else if (f.name && f.data) {
-      fields[f.name] = Buffer.from(f.data, 'latin1').toString('utf8')
+      fields[f.name] = Buffer.from(f.data).toString('utf8')
     }
   }
 
