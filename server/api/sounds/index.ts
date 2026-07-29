@@ -1,44 +1,48 @@
-import { getSounds } from '~/server/utils/sounds'
+import { db } from '~/server/utils/db'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const query = getQuery(event)
-  let sounds = getSounds()
-
-  const search = (query.search as string || '').toLowerCase()
-  const category = query.category as string || ''
-  const sort = query.sort as string || 'plays'
   const page = Math.max(1, parseInt(query.page as string || '1'))
   const pageSize = Math.min(100, Math.max(1, parseInt(query.pageSize as string || '50')))
+  const category = (query.category as string) || ''
+  const search = (query.search as string || '').toLowerCase()
+  const sort = (query.sort as string) || 'plays'
 
-  if (category && category !== '全部') {
-    sounds = sounds.filter(s => s.category === category)
+  const conditions: string[] = []
+  const params: (string | number)[] = []
+
+  if (category) {
+    conditions.push('category = ?')
+    params.push(category)
   }
   if (search) {
-    sounds = sounds.filter(s => s.name.toLowerCase().includes(search))
+    conditions.push('LOWER(name) LIKE ?')
+    params.push(`%${search}%`)
   }
 
-  switch (sort) {
-    case 'plays':
-      sounds.sort((a, b) => b.plays - a.plays)
-      break
-    case 'downloads':
-      sounds.sort((a, b) => b.downloads - a.downloads)
-      break
-    case 'latest':
-    default:
-      sounds.sort((a, b) => b.date.localeCompare(a.date))
-      break
-  }
+  const where = conditions.length ? 'WHERE ' + conditions.join(' AND ') : ''
+  const order = sort === 'downloads' ? 'ORDER BY downloads DESC' : 'ORDER BY date DESC'
 
-  const total = sounds.length
-  const totalPages = Math.ceil(total / pageSize)
-  const start = (page - 1) * pageSize
-  const items = sounds.slice(start, start + pageSize)
+  const [[{ total }]] = await db().query(`SELECT COUNT(*) as total FROM sounds ${where}`, params) as any
+  const totalPages = Math.ceil(total / pageSize) || 1
 
-  const cacheControl = search || category !== '全部'
+  const [rows] = await db().query(
+    `SELECT * FROM sounds ${where} ${order} LIMIT ? OFFSET ?`,
+    [...params, pageSize, (page - 1) * pageSize]
+  ) as any
+
+  const items = rows.map((r: any) => ({
+    ...r,
+    tags: typeof r.tags === 'string' ? JSON.parse(r.tags) : r.tags || [],
+    plays: Number(r.plays),
+    downloads: Number(r.downloads),
+    shares: Number(r.shares),
+  }))
+
+  const cacheControl = search || category
     ? 'private, max-age=30'
     : 'public, max-age=300, stale-while-revalidate=3600'
-
   setResponseHeader(event, 'Cache-Control', cacheControl)
+
   return { items, total, page, pageSize, totalPages }
 })

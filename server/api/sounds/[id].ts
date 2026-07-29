@@ -1,10 +1,17 @@
-import { getSounds } from '~/server/utils/sounds'
+import { db } from '~/server/utils/db'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
-  const sound = getSounds().find(s => s.id === id)
-  if (!sound) {
+  const [rows] = await db().query('SELECT * FROM sounds WHERE id = ?', [id]) as any
+  if (!rows.length) {
     throw createError({ statusCode: 404, statusMessage: 'Sound not found' })
   }
-  return sound
+  const r = rows[0]
+  return {
+    ...r,
+    tags: typeof r.tags === 'string' ? JSON.parse(r.tags) : r.tags || [],
+    plays: Number(r.plays),
+    downloads: Number(r.downloads),
+    shares: Number(r.shares),
+  }
 })

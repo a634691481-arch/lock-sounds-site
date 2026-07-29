@@ -1,4 +1,4 @@
-import { getSounds } from '~/server/utils/sounds'
+import { db } from '~/server/utils/db'
 
 const SITE_URL = process.env.SITE_URL || 'https://lock.mooon.vip'
 
@@ -6,12 +6,16 @@ function escapeXml(s: string) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
-export default defineEventHandler(() => {
-  const sounds = getSounds()
-  const soundSlugs = sounds.map(s => `${s.id}-${s.name.toLowerCase().replace(/[^\w\u4e00-\u9fff\s-]/g, '').replace(/[\s_]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`)
-  const urls: string[] = [
+export default defineEventHandler(async () => {
+  const [rows] = await db().query('SELECT id, name FROM sounds') as any
+
+  const soundSlugs = rows.map((s: any) =>
+    `${s.id}-${s.name.toLowerCase().replace(/[^\w\u4e00-\u9fff\s-]/g, '').replace(/[\s_]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`
+  )
+
+  const urls = [
     SITE_URL,
-    ...soundSlugs.map(slug => `${SITE_URL}/sounds/${slug}`),
+    ...soundSlugs.map((slug: string) => `${SITE_URL}/sounds/${slug}`),
   ]
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
