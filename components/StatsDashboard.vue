@@ -155,18 +155,6 @@ async function open() {
     stats.value = await $fetch<Stats>('/api/stats')
   } catch { /* silent */ }
 }
-
-watch(show, (val) => {
-  if (val) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = ''
-  }
-})
-
-onUnmounted(() => {
-  document.body.style.overflow = ''
-})
 </script>
 
 <style scoped>
