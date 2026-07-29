@@ -1,6 +1,6 @@
 <template>
   <Teleport to="body">
-    <div class="fixed bottom-24 right-5 z-[9000]">
+    <div class="fixed right-5 bottom-[128px] sm:bottom-[72px] z-[9000]">
       <!-- Floating button -->
       <button
         class="w-10 h-10 rounded-full bg-violet-600 hover:bg-violet-500 shadow-lg shadow-violet-600/30 cursor-pointer text-white text-sm hover:scale-110 transition-all duration-300 flex items-center justify-center border-none"
