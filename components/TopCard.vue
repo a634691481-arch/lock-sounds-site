@@ -10,10 +10,10 @@
       >
         <span
           class="w-6 text-right tabular-nums text-[10px] font-mono flex-shrink-0"
-          :class="i === 0 ? 'text-amber-300 font-bold' : i === 1 ? 'text-white/12' : i === 2 ? 'text-amber-600' : 'text-white/10'"
+          :class="i === 0 ? 'text-amber-300 font-bold' : i === 1 ? 'text-white/25' : i === 2 ? 'text-amber-600' : 'text-white/20'"
         >{{ i + 1 }}</span>
-        <span class="text-white/55 truncate flex-1 group-hover/item:text-white/80 transition-colors">{{ item.name }}</span>
-        <span class="text-white/15 tabular-nums flex-shrink-0 text-[10px]">{{ item.count }}</span>
+        <span class="text-white/70 truncate flex-1 group-hover/item:text-white transition-colors">{{ item.name }}</span>
+        <span class="text-white/35 tabular-nums flex-shrink-0 text-[10px]">{{ item.count }}</span>
       </div>
     </div>
   </div>
