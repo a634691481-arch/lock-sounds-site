@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  modules: ['@nuxtjs/tailwindcss', '@vite-pwa/nuxt'],
+  modules: ['@nuxtjs/tailwindcss', '@vite-pwa/nuxt', '@nuxtjs/sitemap', 'nuxt-jsonld'],
   css: ['~/assets/css/main.css'],
   compatibilityDate: '2026-07-24',
   sourcemap: { client: false, server: false },
@@ -10,6 +10,14 @@ export default defineNuxtConfig({
     public: {
       siteUrl: 'https://lock.mooon.vip',
     },
+  },
+
+  site: {
+    url: 'https://lock.mooon.vip',
+  },
+
+  sitemap: {
+    sources: ['/api/__sitemap__/sounds'],
   },
 
   pwa: {
