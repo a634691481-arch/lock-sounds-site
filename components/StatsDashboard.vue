@@ -7,10 +7,12 @@
       <!-- Floating button -->
       <button
         class="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#e94560] ring-4 ring-white/60 shadow-[0_4px_16px_rgba(233,69,96,0.5)] cursor-pointer text-white text-sm sm:text-lg hover:scale-110 hover:shadow-[0_8px_28px_rgba(233,69,96,0.6)] transition-all duration-300 ease-out flex items-center justify-center border-none"
+        :disabled="loading"
         title="统计看板"
         @click="open"
       >
-        <Icon name="chart-bar" class="w-5 h-5 sm:w-6 sm:h-6" />
+        <span v-if="loading" class="w-5 h-5 sm:w-6 sm:h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        <Icon v-else name="chart-bar" class="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
 
       <!-- Panel -->
@@ -136,6 +138,7 @@ interface Stats {
 
 const show = ref(false)
 const stats = ref<Stats | null>(null)
+const loading = ref(false)
 
 const currentHour = computed(() => new Date().getHours())
 const maxCount = computed(() => {
@@ -144,10 +147,12 @@ const maxCount = computed(() => {
 })
 
 async function open() {
-  show.value = true
+  if (loading.value) return
+  loading.value = true
   try {
     stats.value = await $fetch<Stats>('/api/stats')
-  } catch { /* silent */ }
+    show.value = true
+  } catch { /* 数据没拿到不弹窗 */ } finally { loading.value = false }
 }
 
 function go(url: string) {
