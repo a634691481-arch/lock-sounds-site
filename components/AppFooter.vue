@@ -42,6 +42,7 @@
         <NuxtLink to="/" class="text-xs text-white/25 hover:text-white/50 transition-colors no-underline">首页</NuxtLink>
         <NuxtLink to="/wallpapers" class="text-xs text-white/25 hover:text-white/50 transition-colors no-underline">壁纸</NuxtLink>
         <NuxtLink to="/upload" class="text-xs text-white/25 hover:text-white/50 transition-colors no-underline">上传</NuxtLink>
+        <NuxtLink to="/stats" class="text-xs text-white/25 hover:text-white/50 transition-colors no-underline">统计</NuxtLink>
         <button class="text-xs text-white/25 hover:text-white/50 transition-colors" @click="$emit('feedback')">反馈</button>
       </div>
     </div>
