@@ -30,6 +30,9 @@ export default defineEventHandler(async (event) => {
       [todayISO],
     ),
     pool.execute(
+      `SELECT event_type, COUNT(*) as count FROM events WHERE event_type IN ('sound_download', 'wallpaper_download') GROUP BY event_type`,
+    ),
+    pool.execute(
       `SELECT HOUR(created_at) as hour, event_type, COUNT(*) as count FROM events WHERE created_at >= ? GROUP BY HOUR(created_at), event_type ORDER BY hour`,
       [todayISO],
     ),
@@ -43,10 +46,14 @@ export default defineEventHandler(async (event) => {
   const [topWallDlsRows] = results[5]
   const [topSearchesRows] = results[6]
   const [todaySummaryRows] = results[7]
-  const [hourlyTrendRows] = results[8]
+  const [downloadTotalRows] = results[8]
+  const [hourlyTrendRows] = results[9]
 
   const summary: Record<string, number> = {}
   ;(todaySummaryRows as any[])?.forEach((r: any) => { summary[r.event_type] = Number(r.count) })
+
+  let download_total = 0
+  ;(downloadTotalRows as any[])?.forEach((r: any) => { download_total += Number(r.count) })
 
   const hourly: Record<number, Record<string, number>> = {}
   ;(hourlyTrendRows as any[])?.forEach((r: any) => {
@@ -75,6 +82,7 @@ export default defineEventHandler(async (event) => {
     top_wallpaper_downloads: (topWallDlsRows as any[]).map(r => ({ id: r.id, name: r.name, count: Number(r.count) })),
     top_searches: (topSearchesRows as any[]).map(r => ({ query: r.query, count: Number(r.count) })),
     today_summary: summary,
+    download_total,
     hourly: { labels, pageview: pageviewSeries, play: playSeries },
   }
 })
