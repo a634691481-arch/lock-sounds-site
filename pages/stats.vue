@@ -116,6 +116,7 @@ interface Stats {
   top_wallpaper_views: StatsItem[]; top_wallpaper_downloads: StatsItem[]
   top_searches: { query: string; count: number }[]
   today_summary: Record<string, number>
+  download_total: number
   hourly: { labels: string[]; pageview: number[]; play: number[] }
 }
 
@@ -127,7 +128,7 @@ const kpiCards = computed(() => [
   { label: '今日 PV', value: stats.value?.pv_today ?? 0, accent: '#e94560', glow: 'rgba(233,69,96,0.08)' },
   { label: '累计 PV', value: stats.value?.pv_total ?? 0, accent: '#a855f7', glow: 'rgba(168,85,247,0.08)' },
   { label: '今日播放', value: stats.value?.today_summary?.sound_play ?? 0, accent: '#22c55e', glow: 'rgba(34,197,94,0.08)' },
-  { label: '今日下载', value: (stats.value?.today_summary?.sound_download ?? 0) + (stats.value?.today_summary?.wallpaper_download ?? 0), accent: '#f59e0b', glow: 'rgba(245,158,11,0.08)' },
+  { label: '永久下载', value: stats.value?.download_total ?? 0, accent: '#f59e0b', glow: 'rgba(245,158,11,0.08)' },
 ])
 
 const eventRows = computed(() => {
